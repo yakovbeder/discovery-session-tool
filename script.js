@@ -240,7 +240,8 @@ class DiscoverySessionTool {
             { title: '7.0 Image Management (Disconnected Environment)', items: ['7.1', '7.2'] },
             { title: '8.0 Observability (Monitoring & Logging)', items: ['8.1', '8.2', '8.3'] },
             { title: '9.0 Platform Operations & Lifecycle', items: ['9.1', '9.2', '9.3', '9.4'] },
-            { title: '10.0 Automation & Integration', items: ['10.1', '10.2', '10.3'] }
+            { title: '10.0 Automation & Integration', items: ['10.1', '10.2', '10.3'] },
+            { title: '11.0 Disaster Recovery', items: ['11.1', '11.2', '11.3'] }
         ];
 
         const questions = {
@@ -277,7 +278,10 @@ class DiscoverySessionTool {
             '9.4': 'What is the strategy for backup and restore (etcd, persistent data)? Which tools?',
             '10.1': 'Which existing CI/CD tools need to be integrated?',
             '10.2': 'Is there an existing GitOps practice in use?',
-            '10.3': 'Should a separate management cluster with ACM be considered?'
+            '10.3': 'Should a separate management cluster with ACM be considered?',
+            '11.1': 'Does DR required?',
+            '11.2': 'What method: active-active, active-passive?',
+            '11.3': 'Does all cluster needs the DR or only storage?'
         };
 
         let html = `
