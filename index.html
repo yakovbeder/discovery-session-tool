@@ -144,10 +144,84 @@
         .toast.info {
             background-color: #3b82f6;
         }
+        
+        /* Sticky Progress Bar */
+        .sticky-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 8px 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+        }
+        .sticky-progress.show {
+            transform: translateY(0);
+        }
+        .sticky-progress-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        /* Collapsible Sections */
+        .section-header {
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.2s;
+        }
+        .section-header:hover {
+            background-color: #f1f5f9 !important;
+        }
+        .section-header .toggle-icon {
+            float: right;
+            margin-right: 10px;
+            transition: transform 0.3s ease;
+        }
+        .section-header.collapsed .toggle-icon {
+            transform: rotate(-90deg);
+        }
+        .section-content {
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        .section-content.collapsed {
+            display: none;
+        }
+        
+        /* Adjust body padding for sticky progress */
+        body {
+            padding-top: 0;
+        }
+        .content-wrapper {
+            padding-top: 20px;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 p-4 sm:p-6 lg:p-8">
-    <div class="max-w-7xl mx-auto">
+    <!-- Sticky Progress Bar -->
+    <div class="sticky-progress" id="sticky-progress">
+        <div class="sticky-progress-content">
+            <div class="text-sm text-gray-600">
+                <span id="sticky-completion-text">0% Complete</span>
+            </div>
+            <div class="w-32">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="sticky-progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="content-wrapper">
+        <div class="max-w-7xl mx-auto">
         <!-- Header -->
         <div class="bg-white shadow-md rounded-lg p-6 mb-6">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
@@ -208,8 +282,11 @@
                 </thead>
                 <tbody id="checklist-body">
                     <!-- 1.0 Project Scope & Cluster Usage -->
-                    <tr>
-                        <td colspan="3" class="section-title">1.0 Project Scope & Cluster Usage</td>
+                    <tr class="section-header" data-section="1">
+                        <td colspan="3" class="section-title">
+                            1.0 Project Scope & Cluster Usage
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                        </td>
                     </tr>
                     <tr>
                         <td>1.1 Cluster Usage</td>
@@ -223,8 +300,11 @@
                     </tr>
 
                     <!-- 2.0 Platform Architecture & Design -->
-                    <tr>
-                        <td colspan="3" class="section-title">2.0 Platform Architecture & Design</td>
+                    <tr class="section-header" data-section="2">
+                        <td colspan="3" class="section-title">
+                            2.0 Platform Architecture & Design
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                        </td>
                     </tr>
                     <tr>
                         <td>2.1 Installation</td>
@@ -253,8 +333,11 @@
                     </tr>
 
                     <!-- 3.0 Hardware & Operating System -->
-                    <tr>
-                        <td colspan="3" class="section-title">3.0 Hardware & Operating System</td>
+                    <tr class="section-header" data-section="3">
+                        <td colspan="3" class="section-title">
+                            3.0 Hardware & Operating System
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                        </td>
                     </tr>
                      <tr>
                         <td>3.1 Hardware</td>
@@ -273,8 +356,11 @@
                     </tr>
 
                     <!-- 4.0 Networking & Load Balancing -->
-                    <tr>
-                        <td colspan="3" class="section-title">4.0 Networking & Load Balancing</td>
+                    <tr class="section-header" data-section="4">
+                        <td colspan="3" class="section-title">
+                            4.0 Networking & Load Balancing
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                        </td>
                     </tr>
                     <tr>
                         <td>4.1 Core Networking</td>
@@ -303,8 +389,11 @@
                     </tr>
 
                     <!-- 5.0 Storage Architecture -->
-                    <tr>
-                        <td colspan="3" class="section-title">5.0 Storage Architecture</td>
+                    <tr class="section-header" data-section="5">
+                        <td colspan="3" class="section-title">
+                            5.0 Storage Architecture
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                        </td>
                     </tr>
                     <tr>
                         <td>5.1 Persistent Storage</td>
@@ -313,8 +402,11 @@
                     </tr>
 
                     <!-- 6.0 Security & Compliance -->
-                    <tr>
-                        <td colspan="3" class="section-title">6.0 Security & Compliance</td>
+                    <tr class="section-header" data-section="6">
+                        <td colspan="3" class="section-title">
+                            6.0 Security & Compliance
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                        </td>
                     </tr>
                     <tr>
                         <td>6.1 Authentication</td>
@@ -348,8 +440,11 @@
                     </tr>
 
                     <!-- 7.0 Image Management -->
-                     <tr>
-                        <td colspan="3" class="section-title">7.0 Image Management</td>
+                     <tr class="section-header" data-section="7">
+                        <td colspan="3" class="section-title">
+                            7.0 Image Management
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                        </td>
                     </tr>
                     <tr>
                         <td>7.1 Installation Type</td>
@@ -363,8 +458,11 @@
                     </tr>
 
                     <!-- 8.0 Observability -->
-                    <tr>
-                        <td colspan="3" class="section-title">8.0 Observability (Monitoring & Logging)</td>
+                    <tr class="section-header" data-section="8">
+                        <td colspan="3" class="section-title">
+                            8.0 Observability (Monitoring & Logging)
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                        </td>
                     </tr>
                     <tr>
                         <td>8.1 Monitoring</td>
@@ -383,8 +481,11 @@
                     </tr>
 
                     <!-- 9.0 Platform Operations & Lifecycle -->
-                    <tr>
-                        <td colspan="3" class="section-title">9.0 Platform Operations & Lifecycle</td>
+                    <tr class="section-header" data-section="9">
+                        <td colspan="3" class="section-title">
+                            9.0 Platform Operations & Lifecycle
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                        </td>
                     </tr>
                     <tr>
                         <td>9.1 Node Management</td>
@@ -408,8 +509,11 @@
                     </tr>
 
                     <!-- 10.0 Automation & Integration -->
-                    <tr>
-                        <td colspan="3" class="section-title">10.0 Automation & Integration</td>
+                    <tr class="section-header" data-section="10">
+                        <td colspan="3" class="section-title">
+                            10.0 Automation & Integration
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                        </td>
                     </tr>
                     <tr>
                         <td>10.1 CI/CD</td>
@@ -428,8 +532,11 @@
                     </tr>
 
                     <!-- 11.0 Disaster Recovery -->
-                    <tr>
-                        <td colspan="3" class="section-title">11.0 Disaster Recovery</td>
+                    <tr class="section-header" data-section="11">
+                        <td colspan="3" class="section-title">
+                            11.0 Disaster Recovery
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                        </td>
                     </tr>
                     <tr>
                         <td>11.1 DR Requirement</td>

@@ -10,6 +10,8 @@ class DiscoverySessionTool {
         this.setupEventListeners();
         this.updateProgress();
         this.setupAutoSave();
+        this.setupCollapsibleSections();
+        this.setupStickyProgress();
     }
 
     setupEventListeners() {
@@ -120,20 +122,37 @@ class DiscoverySessionTool {
 
         const percentage = totalFields > 0 ? Math.round((completedFields / totalFields) * 100) : 0;
         
-        document.getElementById('progress-fill').style.width = `${percentage}%`;
-        document.getElementById('completion-text').textContent = `${percentage}% Complete`;
+        // Update main progress bar
+        const progressFill = document.getElementById('progress-fill');
+        const completionText = document.getElementById('completion-text');
+        
+        progressFill.style.width = `${percentage}%`;
+        completionText.textContent = `${percentage}% Complete`;
+
+        // Update sticky progress bar
+        const stickyProgressFill = document.getElementById('sticky-progress-fill');
+        const stickyCompletionText = document.getElementById('sticky-completion-text');
+        
+        if (stickyProgressFill && stickyCompletionText) {
+            stickyProgressFill.style.width = `${percentage}%`;
+            stickyCompletionText.textContent = `${percentage}% Complete`;
+        }
 
         // Update progress bar color based on completion
-        const progressFill = document.getElementById('progress-fill');
-        if (percentage < 25) {
-            progressFill.style.backgroundColor = '#ef4444'; // red
-        } else if (percentage < 50) {
-            progressFill.style.backgroundColor = '#f59e0b'; // yellow
-        } else if (percentage < 75) {
-            progressFill.style.backgroundColor = '#3b82f6'; // blue
-        } else {
-            progressFill.style.backgroundColor = '#10b981'; // green
-        }
+        const progressBars = [progressFill, stickyProgressFill];
+        progressBars.forEach(bar => {
+            if (bar) {
+                if (percentage < 25) {
+                    bar.style.backgroundColor = '#ef4444'; // red
+                } else if (percentage < 50) {
+                    bar.style.backgroundColor = '#f59e0b'; // yellow
+                } else if (percentage < 75) {
+                    bar.style.backgroundColor = '#3b82f6'; // blue
+                } else {
+                    bar.style.backgroundColor = '#10b981'; // green
+                }
+            }
+        });
     }
 
     saveData() {
@@ -382,6 +401,75 @@ class DiscoverySessionTool {
         setTimeout(() => {
             toast.classList.remove('show');
         }, 3000);
+    }
+
+    setupCollapsibleSections() {
+        const sectionHeaders = document.querySelectorAll('.section-header');
+        
+        sectionHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const sectionNumber = header.getAttribute('data-section');
+                const isCollapsed = header.classList.contains('collapsed');
+                
+                if (isCollapsed) {
+                    // Expand section
+                    header.classList.remove('collapsed');
+                    this.showSectionContent(sectionNumber);
+                } else {
+                    // Collapse section
+                    header.classList.add('collapsed');
+                    this.hideSectionContent(sectionNumber);
+                }
+            });
+        });
+    }
+
+    showSectionContent(sectionNumber) {
+        const rows = this.getSectionRows(sectionNumber);
+        rows.forEach(row => {
+            row.style.display = '';
+        });
+    }
+
+    hideSectionContent(sectionNumber) {
+        const rows = this.getSectionRows(sectionNumber);
+        rows.forEach(row => {
+            row.style.display = 'none';
+        });
+    }
+
+    getSectionRows(sectionNumber) {
+        const header = document.querySelector(`[data-section="${sectionNumber}"]`);
+        if (!header) return [];
+        
+        const rows = [];
+        let currentRow = header.nextElementSibling;
+        
+        // Collect all rows until we hit another section header
+        while (currentRow && !currentRow.classList.contains('section-header')) {
+            rows.push(currentRow);
+            currentRow = currentRow.nextElementSibling;
+        }
+        
+        return rows;
+    }
+
+    setupStickyProgress() {
+        const stickyProgress = document.getElementById('sticky-progress');
+        let lastScrollTop = 0;
+        
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            // Show sticky progress when scrolling down and past the header
+            if (scrollTop > 100 && scrollTop > lastScrollTop) {
+                stickyProgress.classList.add('show');
+            } else if (scrollTop <= 100 || scrollTop < lastScrollTop) {
+                stickyProgress.classList.remove('show');
+            }
+            
+            lastScrollTop = scrollTop;
+        });
     }
 }
 
