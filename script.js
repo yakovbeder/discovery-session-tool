@@ -250,17 +250,17 @@ class DiscoverySessionTool {
 
     generatePDFHTML(data) {
         const sections = [
-            { title: '1.0 Project Scope & Cluster Usage', items: ['1.1', '1.2'] },
-            { title: '2.0 Platform Architecture & Design', items: ['2.1', '2.2', '2.3', '2.4', '2.5'] },
-            { title: '3.0 Hardware & Operating System', items: ['3.1', '3.2', '3.3'] },
-            { title: '4.0 Networking & Load Balancing', items: ['4.1', '4.2', '4.3', '4.4', '4.5'] },
-            { title: '5.0 Storage Architecture', items: ['5.1'] },
-            { title: '6.0 Security & Compliance', items: ['6.1', '6.2', '6.3', '6.4', '6.5', '6.6'] },
-            { title: '7.0 Image Management', items: ['7.1', '7.2'] },
-            { title: '8.0 Observability (Monitoring & Logging)', items: ['8.1', '8.2', '8.3'] },
-            { title: '9.0 Platform Operations & Lifecycle', items: ['9.1', '9.2', '9.3', '9.4'] },
-            { title: '10.0 Automation & Integration', items: ['10.1', '10.2', '10.3'] },
-            { title: '11.0 Disaster Recovery', items: ['11.1', '11.2', '11.3'] }
+            { title: '1. Project Scope & Cluster Usage', items: ['1.1', '1.2'] },
+            { title: '2. Platform Architecture & Design', items: ['2.1', '2.2', '2.3', '2.4', '2.5'] },
+            { title: '3. Hardware & Operating System', items: ['3.1', '3.2', '3.3'] },
+            { title: '4. Networking & Load Balancing', items: ['4.1', '4.2', '4.3', '4.4', '4.5'] },
+            { title: '5. Storage Architecture', items: ['5.1'] },
+            { title: '6. Security & Compliance', items: ['6.1', '6.2', '6.3', '6.4', '6.5', '6.6'] },
+            { title: '7. Image Management', items: ['7.1', '7.2'] },
+            { title: '8. Observability (Monitoring & Logging)', items: ['8.1', '8.2', '8.3'] },
+            { title: '9. Platform Operations & Lifecycle', items: ['9.1', '9.2', '9.3', '9.4'] },
+            { title: '10. Automation & Integration', items: ['10.1', '10.2', '10.3'] },
+            { title: '11. Disaster Recovery', items: ['11.1', '11.2', '11.3'] }
         ];
 
         const questions = {
