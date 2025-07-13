@@ -237,7 +237,7 @@ class DiscoverySessionTool {
             { title: '4.0 Networking & Load Balancing', items: ['4.1', '4.2', '4.3', '4.4', '4.5'] },
             { title: '5.0 Storage Architecture', items: ['5.1'] },
             { title: '6.0 Security & Compliance', items: ['6.1', '6.2', '6.3', '6.4', '6.5', '6.6'] },
-            { title: '7.0 Image Management (Disconnected Environment)', items: ['7.1', '7.2'] },
+            { title: '7.0 Image Management', items: ['7.1', '7.2'] },
             { title: '8.0 Observability (Monitoring & Logging)', items: ['8.1', '8.2', '8.3'] },
             { title: '9.0 Platform Operations & Lifecycle', items: ['9.1', '9.2', '9.3', '9.4'] },
             { title: '10.0 Automation & Integration', items: ['10.1', '10.2', '10.3'] },
