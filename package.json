@@ -1,0 +1,42 @@
+{
+  "name": "openshift-discovery-session-tool",
+  "version": "1.0.0",
+  "description": "A modern, interactive web-based checklist tool for conducting OpenShift discovery sessions",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 server.py",
+    "start:python": "python server.py",
+    "serve": "python3 -m http.server 8000",
+    "dev": "python3 server.py"
+  },
+  "keywords": [
+    "openshift",
+    "discovery",
+    "checklist",
+    "kubernetes",
+    "redhat",
+    "deployment",
+    "planning"
+  ],
+  "author": "OpenShift Discovery Tool",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/openshift-discovery-session-tool.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/openshift-discovery-session-tool/issues"
+  },
+  "homepage": "https://github.com/your-org/openshift-discovery-session-tool#readme",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "browserslist": [
+    "Chrome >= 60",
+    "Firefox >= 55",
+    "Safari >= 12",
+    "Edge >= 79"
+  ]
+} 
