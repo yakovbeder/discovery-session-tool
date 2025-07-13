@@ -2,12 +2,14 @@
 
 ## 🚀 Quick Start for Team Members
 
-### Option 1: One-Command Setup (Easiest)
+### Option 1: One-Command Setup
+
 ```bash
 curl -sSL https://raw.githubusercontent.com/yakovbeder/discovery-session-tool/main/setup-team.sh | bash
 ```
 
 ### Option 2: Manual Setup
+
 ```bash
 # Clone the repository
 git clone https://github.com/yakovbeder/discovery-session-tool.git
@@ -24,10 +26,12 @@ python3 server.py
 # Clone and open directly
 git clone https://github.com/yakovbeder/discovery-session-tool.git
 cd discovery-session-tool
-open index.html  # macOS
-# or
-xdg-open index.html  # Linux
-# or just double-click index.html on Windows
+
+# macOS
+open index.html
+
+# Linux
+xdg-open index.html
 ```
 
 ## 🌐 Access the Tool
@@ -55,6 +59,13 @@ git pull origin main
 - **Modern browser** (Chrome, Firefox, Safari, Edge)
 - **Git** (for cloning)
 
+## 🐚 Shell Compatibility
+
+The setup script works with:
+- **bash** (default on most Linux systems)
+- **zsh** (default on macOS Catalina+)
+- **fish** (modern shell)
+
 ## 🆘 Troubleshooting
 
 **Port 8000 already in use?**
@@ -70,9 +81,6 @@ brew install python3
 
 # Ubuntu/Debian
 sudo apt install python3
-
-# Windows
-# Download from python.org
 ```
 
 ---

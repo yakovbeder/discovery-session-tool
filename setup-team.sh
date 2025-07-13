@@ -1,9 +1,17 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # OpenShift Discovery Session Tool - Team Setup Script
 # This script helps team members quickly set up the tool locally
+# Compatible with bash, zsh, and other POSIX shells
+
+set -e  # Exit on any error
 
 echo "🚀 Setting up OpenShift Discovery Session Tool..."
+echo ""
+
+# Detect shell for better user experience
+SHELL_NAME=$(basename "$SHELL")
+echo "📋 Detected shell: $SHELL_NAME"
 echo ""
 
 # Check if directory already exists
@@ -35,4 +43,6 @@ echo ""
 echo "📖 Then open your browser to: http://localhost:8000"
 echo ""
 echo "💡 Your data will be saved locally and won't conflict with others!"
+echo ""
+echo "🔄 To update later: git pull origin main"
 echo "" 
