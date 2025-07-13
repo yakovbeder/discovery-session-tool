@@ -5,7 +5,7 @@ A modern, interactive web-based checklist tool for conducting OpenShift discover
 ## Features
 
 ### 🎯 Core Functionality
-- **Interactive Checklist**: Complete discovery session checklist with 10 major sections
+- **Interactive Checklist**: Complete discovery session checklist with 11 major sections
 - **Real-time Progress Tracking**: Visual progress bar showing completion percentage
 - **Auto-save**: Automatically saves data every 30 seconds to prevent loss
 - **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
@@ -82,6 +82,11 @@ A modern, interactive web-based checklist tool for conducting OpenShift discover
     - CI/CD tool integration
     - GitOps implementation
     - ACM management cluster consideration
+
+11. **Disaster Recovery**
+    - DR requirements assessment
+    - Active-active vs active-passive methods
+    - DR scope (full cluster vs storage only)
 
 ## Usage
 
@@ -167,6 +172,8 @@ To add new sections to the checklist:
 2. Update the `sections` array in `script.js` (generatePDFHTML method)
 3. Add questions to the `questions` object in `script.js`
 
+*Note: The tool currently includes 11 major sections covering all aspects of OpenShift discovery.*
+
 ### Styling
 The tool uses Tailwind CSS classes. You can customize the appearance by:
 - Modifying the CSS in the `<style>` section of `index.html`
@@ -197,4 +204,4 @@ For issues or questions:
 
 ---
 
-**Note**: This tool is designed for OpenShift discovery sessions and follows Red Hat's best practices for OpenShift deployment planning. # Updated: Sun Jul 13 16:59:41 IDT 2025
+**Note**: This tool is designed for OpenShift discovery sessions and follows Red Hat's best practices for OpenShift deployment planning.
