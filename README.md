@@ -85,10 +85,26 @@ A modern, interactive web-based checklist tool for conducting OpenShift discover
 
 ## Usage
 
-### Option 1: Use Online Version (Recommended)
-Visit the live version at: **https://yakovbeder.github.io/discovery-session-tool/**
+### For Team Members (Recommended)
+Each team member should run the tool locally to avoid data conflicts:
 
-### Option 2: Local Development
+```bash
+# Quick setup (run this once)
+curl -sSL https://raw.githubusercontent.com/yakovbeder/discovery-session-tool/main/setup-team.sh | bash
+
+# Or manually:
+git clone https://github.com/yakovbeder/discovery-session-tool.git
+cd discovery-session-tool
+python3 server.py
+```
+
+Then open: **http://localhost:8000**
+
+### For Demo/Presentation
+Visit the live version at: **https://yakovbeder.github.io/discovery-session-tool/**
+*Note: This is for demonstration only - data is shared between all users*
+
+### Local Development
 1. Open `index.html` in a modern web browser
 2. Start filling out the checklist sections
 3. Data is automatically saved as you type
