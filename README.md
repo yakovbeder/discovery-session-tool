@@ -86,7 +86,7 @@ A modern, interactive web-based checklist tool for conducting OpenShift discover
 ## Usage
 
 ### Option 1: Use Online Version (Recommended)
-Visit the live version at: **https://YOUR_USERNAME.github.io/discovery-session-tool/**
+Visit the live version at: **https://yakovbeder.github.io/discovery-session-tool/**
 
 ### Option 2: Local Development
 1. Open `index.html` in a modern web browser
