@@ -85,7 +85,10 @@ A modern, interactive web-based checklist tool for conducting OpenShift discover
 
 ## Usage
 
-### Getting Started
+### Option 1: Use Online Version (Recommended)
+Visit the live version at: **https://YOUR_USERNAME.github.io/discovery-session-tool/**
+
+### Option 2: Local Development
 1. Open `index.html` in a modern web browser
 2. Start filling out the checklist sections
 3. Data is automatically saved as you type
@@ -111,9 +114,14 @@ A modern, interactive web-based checklist tool for conducting OpenShift discover
 
 ```
 discovery-session-tool/
-├── index.html          # Main HTML file
+├── index.html          # Main application
 ├── script.js           # JavaScript functionality
-└── README.md          # This documentation
+├── server.py           # Python HTTP server
+├── start.sh            # Quick start script
+├── package.json        # Project metadata
+├── README.md           # This documentation
+├── QUICKSTART.md       # Quick start guide
+└── .gitignore          # Git ignore rules
 ```
 
 ## Technical Details
