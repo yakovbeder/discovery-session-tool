@@ -251,7 +251,7 @@ class DiscoverySessionTool {
     generatePDFHTML(data) {
         const sections = [
             { title: '1. Project Scope & Cluster Usage', items: ['1.1', '1.2'] },
-            { title: '2. Platform Architecture & Design', items: ['2.1', '2.2', '2.3', '2.4', '2.5'] },
+            { title: '2. Platform Architecture & Design', items: ['2.1', '2.2', '2.3', '2.4', '2.5', '2.6'] },
             { title: '3. Hardware & Operating System', items: ['3.1', '3.2', '3.3'] },
             { title: '4. Networking & Load Balancing', items: ['4.1', '4.2', '4.3', '4.4', '4.5'] },
             { title: '5. Storage Architecture', items: ['5.1'] },
@@ -266,11 +266,12 @@ class DiscoverySessionTool {
         const questions = {
             '1.1': 'How many distinct OpenShift clusters are required?',
             '1.2': 'What is the designated purpose for each cluster (e.g., Non-Production, Production, Management, etc.)?',
-            '2.1': 'Which installation method will be used: IPI or UPI?',
-            '2.2': 'What is the target OCP version? (if it differs between clusters, please specify for each)',
-            '2.3': 'What is the mix of node types (VMs, Bare-Metal) and their roles (Master, Worker, Infra)?',
-            '2.4': 'What is the planned number of nodes per cluster? Will dedicated infra nodes be used?',
-            '2.5': 'Can we confirm high-performance disks (SSDs/NVMe) will be available for etcd on Master nodes?',
+            '2.1': 'What is the current infrastructure (for example VMware, version, ESXi amount)?',
+            '2.2': 'Which installation method will be used: IPI or UPI?',
+            '2.3': 'What is the target OCP version? (if it differs between clusters, please specify for each)',
+            '2.4': 'What is the mix of node types (VMs, Bare-Metal) and their roles (Master, Worker, Infra)?',
+            '2.5': 'What is the planned number of nodes per cluster? Will dedicated infra nodes be used?',
+            '2.6': 'Can we confirm high-performance disks (SSDs/NVMe) will be available for etcd on Master nodes?',
             '3.1': 'What are the expectations for future hardware growth?',
             '3.2': 'Are stakeholders familiar with RHCOS as the immutable OS for cluster nodes?',
             '3.3': 'What RHEL version will be used for the bastion server?',
