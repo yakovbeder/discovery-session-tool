@@ -43,6 +43,7 @@ xdg-open index.html
 
 - **Local data**: Your responses are saved in your browser's local storage
 - **No conflicts**: Each team member has their own data
+- **Custom questions**: Your custom questions are also saved locally
 - **Export**: Use the export buttons to save your work as JSON or PDF
 
 ## 🔄 Updates
@@ -58,6 +59,13 @@ git pull origin main
 - **Python 3** (for local server)
 - **Modern browser** (Chrome, Firefox, Safari, Edge)
 - **Git** (for cloning)
+
+## 🆕 New Features
+
+- **Custom Questions**: Add your own questions to any section
+- **Collapsible Sections**: Click section headers to expand/collapse
+- **Sticky Progress Bar**: Progress indicator appears when scrolling
+- **Enhanced PDF Export**: Includes subject information for better organization
 
 ## 🐚 Shell Compatibility
 

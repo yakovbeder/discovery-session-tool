@@ -6,6 +6,7 @@ A modern, interactive web-based checklist tool for conducting OpenShift discover
 
 ### 🎯 Core Functionality
 - **Interactive Checklist**: Complete discovery session checklist with 11 major sections
+- **Custom Questions**: Add custom questions to any section with automatic numbering
 - **Real-time Progress Tracking**: Visual progress bar showing completion percentage
 - **Auto-save**: Automatically saves data every 30 seconds to prevent loss
 - **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
@@ -13,8 +14,9 @@ A modern, interactive web-based checklist tool for conducting OpenShift discover
 ### 💾 Data Management
 - **Local Storage**: Data is automatically saved to browser's local storage
 - **Import/Export**: Load and save data as JSON files
-- **PDF Export**: Generate professional PDF reports for sharing
+- **PDF Export**: Generate professional PDF reports with subject information
 - **Clear All**: Reset all fields with confirmation dialog
+- **Custom Questions Persistence**: Custom questions are saved and restored automatically
 
 ### ⌨️ User Experience
 - **Keyboard Shortcuts**:
@@ -23,15 +25,18 @@ A modern, interactive web-based checklist tool for conducting OpenShift discover
   - `Ctrl/Cmd + P`: Export to PDF
 - **Toast Notifications**: Real-time feedback for all actions
 - **Floating Action Buttons**: Quick access to common functions
+- **Collapsible Sections**: Click section headers to expand/collapse
+- **Sticky Progress Bar**: Progress indicator that appears when scrolling
 - **Modern UI**: Clean, professional interface using Tailwind CSS
 
 ## Sections Covered
 
-1. **Project Scope & Cluster Usage**
-   - Number of clusters required
-   - Cluster purposes and designations
+1. **Project Scope & Cluster(s) Purpose**
+   - Environment size (number of clusters required)
+   - Cluster(s) purposes and designations
 
 2. **Platform Architecture & Design**
+   - Current infrastructure assessment
    - Installation method (IPI/UPI)
    - OCP version selection
    - Node composition and breakdown
@@ -112,7 +117,8 @@ Visit the live version at: **https://yakovbeder.github.io/discovery-session-tool
 ### Local Development
 1. Open `index.html` in a modern web browser
 2. Start filling out the checklist sections
-3. Data is automatically saved as you type
+3. Add custom questions using the "Add Question" buttons in each section
+4. Data is automatically saved as you type
 
 ### Saving and Loading
 - **Auto-save**: Data is automatically saved every 30 seconds
@@ -121,8 +127,9 @@ Visit the live version at: **https://yakovbeder.github.io/discovery-session-tool
 - **Export**: Use "Export JSON" to download your data as a file
 
 ### Exporting Reports
-- **PDF Export**: Click "Export PDF" to generate a printable report
+- **PDF Export**: Click "Export PDF" to generate a printable report with subject information
 - **JSON Export**: Click "Export JSON" to download data for backup or sharing
+- **Custom Questions**: Custom questions are included in both PDF and JSON exports
 
 ### Keyboard Shortcuts
 | Shortcut | Action |
@@ -171,8 +178,17 @@ To add new sections to the checklist:
 1. Add the HTML structure in `index.html`
 2. Update the `sections` array in `script.js` (generatePDFHTML method)
 3. Add questions to the `questions` object in `script.js`
+4. Add subjects to the `subjects` object in `script.js`
 
 *Note: The tool currently includes 11 major sections covering all aspects of OpenShift discovery.*
+
+### Adding Custom Questions
+Users can add custom questions to any section:
+1. Click the "Add Question" button at the end of any section
+2. Fill in the Subject field (e.g., "Cluster Usage", "Hardware")
+3. Enter your custom question text
+4. Add your response
+5. Custom questions are automatically numbered and saved
 
 ### Styling
 The tool uses Tailwind CSS classes. You can customize the appearance by:

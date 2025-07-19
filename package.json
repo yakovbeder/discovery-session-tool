@@ -1,7 +1,7 @@
 {
   "name": "openshift-discovery-session-tool",
   "version": "1.0.0",
-  "description": "A modern, interactive web-based checklist tool for conducting OpenShift discovery sessions",
+  "description": "A modern, interactive web-based checklist tool for conducting OpenShift discovery sessions with custom questions support",
   "main": "index.html",
   "scripts": {
     "start": "python3 server.py",
@@ -16,7 +16,10 @@
     "kubernetes",
     "redhat",
     "deployment",
-    "planning"
+    "planning",
+    "custom-questions",
+    "pdf-export",
+    "collapsible-sections"
   ],
   "author": "OpenShift Discovery Tool",
   "license": "MIT",

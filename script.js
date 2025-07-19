@@ -56,7 +56,8 @@ class DiscoverySessionTool {
         const data = {
             timestamp: new Date().toISOString(),
             version: '1.0',
-            sections: {}
+            sections: {},
+            customQuestions: {}
         };
 
         const textareas = document.querySelectorAll('textarea');
@@ -69,6 +70,22 @@ class DiscoverySessionTool {
                 }
                 data.sections[section][type] = textarea.value;
             }
+        });
+
+        // Collect custom questions
+        const customQuestions = document.querySelectorAll('.custom-question');
+        customQuestions.forEach(row => {
+            const questionId = row.querySelector('.question-text').getAttribute('data-question-id');
+            const questionText = row.querySelector('.question-text').value;
+            const subjectText = row.querySelector('.subject-text').value;
+            const response = row.querySelector('textarea').value;
+            
+            if (!data.customQuestions[questionId]) {
+                data.customQuestions[questionId] = {};
+            }
+            data.customQuestions[questionId].text = questionText;
+            data.customQuestions[questionId].subject = subjectText;
+            data.customQuestions[questionId].response = response;
         });
 
         return data;
@@ -87,6 +104,38 @@ class DiscoverySessionTool {
                 }
             }
         });
+
+        // Restore custom questions if they exist
+        if (data.customQuestions) {
+            Object.keys(data.customQuestions).forEach(questionId => {
+                const customData = data.customQuestions[questionId];
+                const [sectionNumber] = questionId.split('.');
+                
+                // Check if the custom question already exists
+                const existingQuestion = document.querySelector(`[data-question-id="${questionId}"]`);
+                if (!existingQuestion) {
+                    // Recreate the custom question
+                    this.addQuestion(parseInt(sectionNumber));
+                    
+                    // Wait a bit for the DOM to update, then populate the data
+                    setTimeout(() => {
+                        const questionInput = document.querySelector(`[data-question-id="${questionId}"]`);
+                        const subjectInput = document.querySelector(`[data-subject-id="${questionId}"]`);
+                        const responseTextarea = document.querySelector(`[data-field="${questionId}-response"]`);
+                        
+                        if (questionInput && customData.text) {
+                            questionInput.value = customData.text;
+                        }
+                        if (subjectInput && customData.subject) {
+                            subjectInput.value = customData.subject;
+                        }
+                        if (responseTextarea && customData.response) {
+                            responseTextarea.value = customData.response;
+                        }
+                    }, 100);
+                }
+            });
+        }
     }
 
     saveToLocalStorage() {
@@ -250,7 +299,7 @@ class DiscoverySessionTool {
 
     generatePDFHTML(data) {
         const sections = [
-            { title: '1. Project Scope & Cluster Usage', items: ['1.1', '1.2'] },
+            { title: '1. Project Scope & Cluster(s) Purpose', items: ['1.1', '1.2'] },
             { title: '2. Platform Architecture & Design', items: ['2.1', '2.2', '2.3', '2.4', '2.5', '2.6'] },
             { title: '3. Hardware & Operating System', items: ['3.1', '3.2', '3.3'] },
             { title: '4. Networking & Load Balancing', items: ['4.1', '4.2', '4.3', '4.4', '4.5'] },
@@ -304,6 +353,47 @@ class DiscoverySessionTool {
             '11.3': 'Does all cluster needs the DR or only storage?'
         };
 
+        const subjects = {
+            '1.1': 'Environment Size',
+            '1.2': 'Cluster(s) Purpose',
+            '2.1': 'Current Infrastructure',
+            '2.2': 'Installation',
+            '2.3': 'OCP Version',
+            '2.4': 'Composition',
+            '2.5': 'Node Breakdown',
+            '2.6': 'HA & etcd',
+            '3.1': 'Hardware',
+            '3.2': 'OS',
+            '3.3': 'OS',
+            '4.1': 'Core Networking',
+            '4.2': 'DNS',
+            '4.3': 'Ingress',
+            '4.4': 'Load Balancing',
+            '4.5': 'Egress',
+            '5.1': 'Persistent Storage',
+            '6.1': 'Authentication',
+            '6.2': 'Authorization',
+            '6.3': 'Network Policies',
+            '6.4': 'Hardening',
+            '6.5': 'Security Tooling',
+            '6.6': 'Service Mesh',
+            '7.1': 'Installation Type',
+            '7.2': 'Image Registry',
+            '8.1': 'Monitoring',
+            '8.2': 'Logging',
+            '8.3': 'Tracing',
+            '9.1': 'Node Management',
+            '9.2': 'Upgrades',
+            '9.3': 'NTP',
+            '9.4': 'Backup/Restore',
+            '10.1': 'CI/CD',
+            '10.2': 'GitOps',
+            '10.3': 'Cluster Management',
+            '11.1': 'DR Requirement',
+            '11.2': 'DR Method',
+            '11.3': 'DR Scope'
+        };
+
         let html = `
             <!DOCTYPE html>
             <html>
@@ -354,20 +444,45 @@ class DiscoverySessionTool {
         sections.forEach(section => {
             html += `<h2>${section.title}</h2>`;
             
-                            section.items.forEach(item => {
-                    const question = questions[item];
-                    const response = data.sections[item]?.response || '';
-                    
-                    html += `
-                        <div class="question">
-                            <div class="question-text">${item}: ${question}</div>
-                            <div class="response">
-                                <strong>Response:</strong> 
-                                ${response ? response : '<span class="empty">No response provided</span>'}
-                            </div>
+            // Add standard questions
+            section.items.forEach(item => {
+                const question = questions[item];
+                const subject = subjects[item] || 'General';
+                const response = data.sections[item]?.response || '';
+                
+                html += `
+                    <div class="question">
+                        <div class="question-text">${item} ${subject}: ${question}</div>
+                        <div class="response">
+                            <strong>Response:</strong> 
+                            ${response ? response : '<span class="empty">No response provided</span>'}
                         </div>
-                    `;
+                    </div>
+                `;
+            });
+            
+            // Add custom questions for this section
+            if (data.customQuestions) {
+                const sectionNumber = section.title.split('.')[0];
+                Object.keys(data.customQuestions).forEach(questionId => {
+                    const customData = data.customQuestions[questionId];
+                    if (questionId.startsWith(sectionNumber + '.')) {
+                        const subjectText = customData.subject || 'Custom';
+                        const questionText = customData.text || 'Custom question';
+                        const response = customData.response || '';
+                        
+                        html += `
+                            <div class="question">
+                                <div class="question-text">${questionId} ${subjectText}: ${questionText}</div>
+                                <div class="response">
+                                    <strong>Response:</strong> 
+                                    ${response ? response : '<span class="empty">No response provided</span>'}
+                                </div>
+                            </div>
+                        `;
+                    }
                 });
+            }
         });
 
         html += `
@@ -472,6 +587,104 @@ class DiscoverySessionTool {
             lastScrollTop = scrollTop;
         });
     }
+
+    addQuestion(sectionNumber) {
+        // Find the add button row for this section
+        const addButtonRow = document.querySelector(`.add-question-row[data-section="${sectionNumber}"]`);
+        if (!addButtonRow) {
+            console.error(`Add button row not found for section ${sectionNumber}`);
+            return;
+        }
+        
+        // Count existing questions in this section (excluding the add button row)
+        const sectionHeader = document.querySelector(`[data-section="${sectionNumber}"]`);
+        let questionCount = 0;
+        let currentRow = sectionHeader.nextElementSibling;
+        
+        while (currentRow && !currentRow.classList.contains('section-header')) {
+            // Count only actual question rows (not add button rows or custom questions)
+            if (!currentRow.classList.contains('add-question-row') && 
+                !currentRow.classList.contains('section-header') &&
+                !currentRow.classList.contains('custom-question') &&
+                currentRow.querySelector('td:first-child') &&
+                currentRow.querySelector('td:first-child').textContent.match(/^\d+\.\d+/)) {
+                questionCount++;
+            }
+            currentRow = currentRow.nextElementSibling;
+        }
+        
+        // Also count existing custom questions
+        const existingCustomQuestions = document.querySelectorAll(`.custom-question`);
+        existingCustomQuestions.forEach(row => {
+            const questionId = row.querySelector('.question-text')?.getAttribute('data-question-id');
+            if (questionId && questionId.startsWith(`${sectionNumber}.`)) {
+                questionCount++;
+            }
+        });
+        
+        const nextQuestionNumber = questionCount + 1;
+        const questionId = `${sectionNumber}.${nextQuestionNumber}`;
+        const fieldId = `${questionId}-response`;
+        
+        // Create the new question row
+        const newRow = document.createElement('tr');
+        newRow.className = 'custom-question';
+        newRow.innerHTML = `
+            <td>${questionId}</td>
+            <td>
+                <input type="text" class="w-full p-1 border border-gray-300 rounded subject-text" 
+                       placeholder="Subject" 
+                       data-subject-id="${questionId}">
+                <button onclick="removeQuestion(this)" class="ml-2 text-red-500 hover:text-red-700 text-sm" title="Remove this question">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+            <td class="question-topic">
+                <input type="text" class="w-full p-2 border border-gray-300 rounded question-text" 
+                       placeholder="Enter your custom question..." 
+                       data-question-id="${questionId}">
+            </td>
+            <td><textarea data-field="${fieldId}" placeholder="Enter response..."></textarea></td>
+        `;
+        
+        // Insert the new row before the "Add Question" button
+        addButtonRow.parentNode.insertBefore(newRow, addButtonRow);
+        
+        // Add event listener to the new textarea
+        const newTextarea = newRow.querySelector('textarea');
+        newTextarea.addEventListener('input', () => {
+            this.saveToLocalStorage();
+            this.updateProgress();
+        });
+        
+        // Add event listener to the question text input
+        const questionInput = newRow.querySelector('.question-text');
+        questionInput.addEventListener('input', () => {
+            this.saveToLocalStorage();
+        });
+        
+        // Add event listener to the subject text input
+        const subjectInput = newRow.querySelector('.subject-text');
+        subjectInput.addEventListener('input', () => {
+            this.saveToLocalStorage();
+        });
+        
+        // Update progress
+        this.updateProgress();
+        this.showToast(`Question ${questionId} added to Section ${sectionNumber}`, 'success');
+    }
+
+    removeQuestion(button) {
+        const row = button.closest('tr');
+        const questionId = row.querySelector('td:first-child').textContent.split(' ')[0];
+        
+        if (confirm(`Are you sure you want to remove question ${questionId}?`)) {
+            row.remove();
+            this.updateProgress();
+            this.saveToLocalStorage();
+            this.showToast(`Question ${questionId} removed`, 'success');
+        }
+    }
 }
 
 // Initialize the tool when the page loads
@@ -498,4 +711,17 @@ function exportToJSON() {
 
 function clearAll() {
     window.discoveryTool.clearAll();
+}
+
+function addQuestion(sectionNumber) {
+    if (window.discoveryTool) {
+        window.discoveryTool.addQuestion(sectionNumber);
+    } else {
+        console.error('discoveryTool not found!');
+        alert('Error: Tool not initialized. Please refresh the page.');
+    }
+}
+
+function removeQuestion(button) {
+    window.discoveryTool.removeQuestion(button);
 } 

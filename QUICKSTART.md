@@ -34,13 +34,15 @@ Once the server is running, open your browser and go to:
 ## ✨ Key Features to Try
 
 1. **Fill out any section** - Data auto-saves every 30 seconds
-2. **Watch the progress bar** - See completion percentage in real-time
-3. **Use keyboard shortcuts**:
+2. **Add custom questions** - Click "Add Question" buttons in any section
+3. **Watch the progress bar** - See completion percentage in real-time
+4. **Use keyboard shortcuts**:
    - `Ctrl/Cmd + S` - Save
    - `Ctrl/Cmd + O` - Load
    - `Ctrl/Cmd + P` - Export PDF
-4. **Export your work** - Try the PDF and JSON export buttons
-5. **Floating buttons** - Use the floating action buttons for quick access
+5. **Export your work** - Try the PDF and JSON export buttons
+6. **Floating buttons** - Use the floating action buttons for quick access
+7. **Collapsible sections** - Click section headers to expand/collapse
 
 ## 🛑 Stop the Server
 

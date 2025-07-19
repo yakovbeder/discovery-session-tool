@@ -281,7 +281,8 @@
             <table>
                 <thead>
                     <tr>
-                        <th class="w-1/6">Section</th>
+                        <th class="w-16">#</th>
+                        <th class="w-1/6">Subject</th>
                         <th class="w-2/5">Question / Topic</th>
                         <th class="w-1/2">Response / Decision</th>
                     </tr>
@@ -289,280 +290,406 @@
                 <tbody id="checklist-body">
                     <!-- 1.0 Project Scope & Cluster Usage -->
                     <tr class="section-header" data-section="1">
-                        <td colspan="3" class="section-title">
-                            <i class="fas fa-project-diagram"></i> 1. Project Scope & Cluster Usage
+                        <td colspan="4" class="section-title">
+                            <i class="fas fa-project-diagram"></i> 1. Project Scope & Cluster(s) Purpose
                             <i class="fas fa-chevron-down toggle-icon"></i>
                         </td>
                     </tr>
                     <tr>
-                        <td>1.1 Cluster Usage</td>
+                        <td>1.1</td>
+                        <td>Environment Size</td>
                         <td class="question-topic">How many distinct OpenShift clusters are required?</td>
                         <td><textarea data-field="1.1-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>1.1 Cluster Usage</td>
+                        <td>1.2</td>
+                        <td>Cluster(s) Purpose</td>
                         <td class="question-topic">What is the designated purpose for each cluster (e.g., Non-Production, Production, Management, etc.)?</td>
                         <td><textarea data-field="1.2-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr class="add-question-row" data-section="1">
+                        <td colspan="4" class="text-center py-4">
+                            <button onclick="addQuestion(1)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 mx-auto transition-colors">
+                                <i class="fas fa-plus"></i>
+                                <span>Add Question</span>
+                            </button>
+                        </td>
                     </tr>
 
                     <!-- 2.0 Platform Architecture & Design -->
                     <tr class="section-header" data-section="2">
-                        <td colspan="3" class="section-title">
+                        <td colspan="4" class="section-title">
                             <i class="fas fa-cogs"></i> 2. Platform Architecture & Design
                             <i class="fas fa-chevron-down toggle-icon"></i>
                         </td>
                     </tr>
                     <tr>
-                        <td>2.1 Current Infrastructure</td>
+                        <td>2.1</td>
+                        <td>Current Infrastructure</td>
                         <td class="question-topic">What is the current infrastructure (for example VMware, version, ESXi amount)?</td>
                         <td><textarea data-field="2.1-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>2.2 Installation</td>
+                        <td>2.2</td>
+                        <td>Installation</td>
                         <td class="question-topic">Which installation method will be used: IPI or UPI?</td>
                         <td><textarea data-field="2.2-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>2.3 OCP Version</td>
+                        <td>2.3</td>
+                        <td>OCP Version</td>
                         <td class="question-topic">What is the target OCP version? (if it differs between clusters, please specify for each)</td>
                         <td><textarea data-field="2.3-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>2.4 Composition</td>
+                        <td>2.4</td>
+                        <td>Composition</td>
                         <td class="question-topic">What is the mix of node types (VMs, Bare-Metal) and their roles (Master, Worker, Infra)?</td>
                         <td><textarea data-field="2.4-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>2.5 Node Breakdown</td>
+                        <td>2.5</td>
+                        <td>Node Breakdown</td>
                         <td class="question-topic">What is the planned number of nodes per cluster? Will dedicated infra nodes be used?</td>
                         <td><textarea data-field="2.5-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>2.6 HA & etcd</td>
+                        <td>2.6</td>
+                        <td>HA & etcd</td>
                         <td class="question-topic">Can we confirm high-performance disks (SSDs/NVMe) will be available for etcd on Master nodes?</td>
                         <td><textarea data-field="2.6-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr class="add-question-row" data-section="2">
+                        <td colspan="4" class="text-center py-4">
+                            <button onclick="addQuestion(2)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 mx-auto transition-colors">
+                                <i class="fas fa-plus"></i>
+                                <span>Add Question</span>
+                            </button>
+                        </td>
                     </tr>
 
                     <!-- 3.0 Hardware & Operating System -->
                     <tr class="section-header" data-section="3">
-                        <td colspan="3" class="section-title">
+                        <td colspan="4" class="section-title">
                             <i class="fas fa-server"></i> 3. Hardware & Operating System
                             <i class="fas fa-chevron-down toggle-icon"></i>
                         </td>
                     </tr>
                      <tr>
-                        <td>3.1 Hardware</td>
+                        <td>3.1</td>
+                        <td>Hardware</td>
                         <td class="question-topic">What are the expectations for future hardware growth?</td>
                         <td><textarea data-field="3.1-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                      <tr>
-                        <td>3.2 OS</td>
+                        <td>3.2</td>
+                        <td>OS</td>
                         <td class="question-topic">Are stakeholders familiar with RHCOS as the immutable OS for cluster nodes?</td>
                         <td><textarea data-field="3.2-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>3.2 OS</td>
+                        <td>3.3</td>
+                        <td>OS</td>
                         <td class="question-topic">What RHEL version will be used for the bastion server?</td>
                         <td><textarea data-field="3.3-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr class="add-question-row" data-section="3">
+                        <td colspan="4" class="text-center py-4">
+                            <button onclick="addQuestion(3)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 mx-auto transition-colors">
+                                <i class="fas fa-plus"></i>
+                                <span>Add Question</span>
+                            </button>
+                        </td>
                     </tr>
 
                     <!-- 4.0 Networking & Load Balancing -->
                     <tr class="section-header" data-section="4">
-                        <td colspan="3" class="section-title">
+                        <td colspan="4" class="section-title">
                             <i class="fas fa-network-wired"></i> 4. Networking & Load Balancing
                             <i class="fas fa-chevron-down toggle-icon"></i>
                         </td>
                     </tr>
                     <tr>
-                        <td>4.1 Core Networking</td>
+                        <td>4.1</td>
+                        <td>Core Networking</td>
                         <td class="question-topic">Any non-default SDN network needs to avoid overlap? (e.g., default Pods: 10.128.0.0/14, Services: 172.30.0.0/16)</td>
                         <td><textarea data-field="4.1-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>4.2 DNS</td>
+                        <td>4.2</td>
+                        <td>DNS</td>
                         <td class="question-topic">Proposed cluster domain names? DNS server type (Windows/Linux)?</td>
                         <td><textarea data-field="4.2-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>4.3 Ingress</td>
+                        <td>4.3</td>
+                        <td>Ingress</td>
                         <td class="question-topic">TLS termination is preferred at the OCP route level. Are other methods required (e.g., re-encrypt at the application level)?</td>
                         <td><textarea data-field="4.3-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>4.4 Load Balancing</td>
+                        <td>4.4</td>
+                        <td>Load Balancing</td>
                         <td class="question-topic">What are the Load Balancing options to be considered?</td>
                         <td><textarea data-field="4.4-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                      <tr>
-                        <td>4.5 Egress</td>
+                        <td>4.5</td>
+                        <td>Egress</td>
                         <td class="question-topic">Do applications need to connect to external components (e.g., DB)?</td>
                         <td><textarea data-field="4.5-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr class="add-question-row" data-section="4">
+                        <td colspan="4" class="text-center py-4">
+                            <button onclick="addQuestion(4)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 mx-auto transition-colors">
+                                <i class="fas fa-plus"></i>
+                                <span>Add Question</span>
+                            </button>
+                        </td>
                     </tr>
 
                     <!-- 5.0 Storage Architecture -->
                     <tr class="section-header" data-section="5">
-                        <td colspan="3" class="section-title">
+                        <td colspan="4" class="section-title">
                             <i class="fas fa-hdd"></i> 5. Storage Architecture
                             <i class="fas fa-chevron-down toggle-icon"></i>
                         </td>
                     </tr>
                     <tr>
-                        <td>5.1 Persistent Storage</td>
+                        <td>5.1</td>
+                        <td>Persistent Storage</td>
                         <td class="question-topic">What storage is available (e.g., NetApp)? Will ODF be required? Is S3 compatibility needed?</td>
                         <td><textarea data-field="5.1-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr class="add-question-row" data-section="5">
+                        <td colspan="4" class="text-center py-4">
+                            <button onclick="addQuestion(5)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 mx-auto transition-colors">
+                                <i class="fas fa-plus"></i>
+                                <span>Add Question</span>
+                            </button>
+                        </td>
                     </tr>
 
                     <!-- 6.0 Security & Compliance -->
                     <tr class="section-header" data-section="6">
-                        <td colspan="3" class="section-title">
+                        <td colspan="4" class="section-title">
                             <i class="fas fa-shield-alt"></i> 6. Security & Compliance
                             <i class="fas fa-chevron-down toggle-icon"></i>
                         </td>
                     </tr>
                     <tr>
-                        <td>6.1 Authentication</td>
+                        <td>6.1</td>
+                        <td>Authentication</td>
                         <td class="question-topic">Which identity provider will be integrated (LDAP (AD) / LDAPS / SSO)?</td>
                         <td><textarea data-field="6.1-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>6.2 Authorization</td>
+                        <td>6.2</td>
+                        <td>Authorization</td>
                         <td class="question-topic">How will authorization be managed (Local users, AD users/groups, RBAC)?</td>
                         <td><textarea data-field="6.2-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>6.3 Network Policies</td>
+                        <td>6.3</td>
+                        <td>Network Policies</td>
                         <td class="question-topic">What is the strategy for implementing Network Policies for traffic segmentation?</td>
                         <td><textarea data-field="6.3-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>6.4 Hardening</td>
+                        <td>6.4</td>
+                        <td>Hardening</td>
                         <td class="question-topic">Are there specific security benchmarks to follow? If so, is the Compliance Operator needed?</td>
                         <td><textarea data-field="6.4-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>6.5 Security Tooling</td>
+                        <td>6.5</td>
+                        <td>Security Tooling</td>
                         <td class="question-topic">Is there a plan to integrate tools like Red Hat Advanced Cluster Security (ACS)?</td>
                         <td><textarea data-field="6.5-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>6.6 Service Mesh</td>
+                        <td>6.6</td>
+                        <td>Service Mesh</td>
                         <td class="question-topic">Is Service Mesh required for mTLS?</td>
                         <td><textarea data-field="6.6-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr class="add-question-row" data-section="6">
+                        <td colspan="4" class="text-center py-4">
+                            <button onclick="addQuestion(6)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 mx-auto transition-colors">
+                                <i class="fas fa-plus"></i>
+                                <span>Add Question</span>
+                            </button>
+                        </td>
                     </tr>
 
                     <!-- 7.0 Image Management -->
                      <tr class="section-header" data-section="7">
-                        <td colspan="3" class="section-title">
+                        <td colspan="4" class="section-title">
                             <i class="fas fa-images"></i> 7. Image Management
                             <i class="fas fa-chevron-down toggle-icon"></i>
                         </td>
                     </tr>
                     <tr>
-                        <td>7.1 Installation Type</td>
+                        <td>7.1</td>
+                        <td>Installation Type</td>
                         <td class="question-topic">What is the type of installation (disconnected / connected)?</td>
                         <td><textarea data-field="7.1-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>7.2 Image Registry</td>
+                        <td>7.2</td>
+                        <td>Image Registry</td>
                         <td class="question-topic">What is the image registry strategy (e.g., local on bastion, external Quay/JFrog/Harbor)?</td>
                         <td><textarea data-field="7.2-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr class="add-question-row" data-section="7">
+                        <td colspan="4" class="text-center py-4">
+                            <button onclick="addQuestion(7)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 mx-auto transition-colors">
+                                <i class="fas fa-plus"></i>
+                                <span>Add Question</span>
+                            </button>
+                        </td>
                     </tr>
 
                     <!-- 8.0 Observability -->
                     <tr class="section-header" data-section="8">
-                        <td colspan="3" class="section-title">
+                        <td colspan="4" class="section-title">
                             <i class="fas fa-chart-line"></i> 8. Observability (Monitoring & Logging)
                             <i class="fas fa-chevron-down toggle-icon"></i>
                         </td>
                     </tr>
                     <tr>
-                        <td>8.1 Monitoring</td>
+                        <td>8.1</td>
+                        <td>Monitoring</td>
                         <td class="question-topic">Discussion of built-in monitoring capabilities. Is user workload monitoring needed? What are the alert destinations (e.g., alert forwarding)?</td>
                         <td><textarea data-field="8.1-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>8.2 Logging</td>
+                        <td>8.2</td>
+                        <td>Logging</td>
                         <td class="question-topic">Discussion of Cluster Logging components (Loki/Vector). Is there a need to forward logs?</td>
                         <td><textarea data-field="8.2-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>8.3 Tracing</td>
+                        <td>8.3</td>
+                        <td>Tracing</td>
                         <td class="question-topic">Is distributed tracing required (e.g., Tempo, Jaeger)?</td>
                         <td><textarea data-field="8.3-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr class="add-question-row" data-section="8">
+                        <td colspan="4" class="text-center py-4">
+                            <button onclick="addQuestion(8)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 mx-auto transition-colors">
+                                <i class="fas fa-plus"></i>
+                                <span>Add Question</span>
+                            </button>
+                        </td>
                     </tr>
 
                     <!-- 9.0 Platform Operations & Lifecycle -->
                     <tr class="section-header" data-section="9">
-                        <td colspan="3" class="section-title">
+                        <td colspan="4" class="section-title">
                             <i class="fas fa-tools"></i> 9. Platform Operations & Lifecycle
                             <i class="fas fa-chevron-down toggle-icon"></i>
                         </td>
                     </tr>
                     <tr>
-                        <td>9.1 Node Management</td>
+                        <td>9.1</td>
+                        <td>Node Management</td>
                         <td class="question-topic">Procedures for adding/removing/replacing nodes</td>
                         <td><textarea data-field="9.1-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>9.2 Upgrades</td>
+                        <td>9.2</td>
+                        <td>Upgrades</td>
                         <td class="question-topic">What is the strategy for managing cluster upgrades and platform lifecycle?</td>
                         <td><textarea data-field="9.2-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>9.3 NTP</td>
+                        <td>9.3</td>
+                        <td>NTP</td>
                         <td class="question-topic">Can we confirm a reliable internal NTP source is available for all nodes?</td>
                         <td><textarea data-field="9.3-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>9.4 Backup/Restore</td>
+                        <td>9.4</td>
+                        <td>Backup/Restore</td>
                         <td class="question-topic">What is the strategy for backup and restore (etcd, persistent data)? Which tools?</td>
                         <td><textarea data-field="9.4-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr class="add-question-row" data-section="9">
+                        <td colspan="4" class="text-center py-4">
+                            <button onclick="addQuestion(9)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 mx-auto transition-colors">
+                                <i class="fas fa-plus"></i>
+                                <span>Add Question</span>
+                            </button>
+                        </td>
                     </tr>
 
                     <!-- 10.0 Automation & Integration -->
                     <tr class="section-header" data-section="10">
-                        <td colspan="3" class="section-title">
+                        <td colspan="4" class="section-title">
                             <i class="fas fa-robot"></i> 10. Automation & Integration
                             <i class="fas fa-chevron-down toggle-icon"></i>
                         </td>
                     </tr>
                     <tr>
-                        <td>10.1 CI/CD</td>
+                        <td>10.1</td>
+                        <td>CI/CD</td>
                         <td class="question-topic">Which existing CI/CD tools need to be integrated?</td>
                         <td><textarea data-field="10.1-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>10.2 GitOps</td>
+                        <td>10.2</td>
+                        <td>GitOps</td>
                         <td class="question-topic">Is there an existing GitOps practice in use?</td>
                         <td><textarea data-field="10.2-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>10.3 Cluster Management</td>
+                        <td>10.3</td>
+                        <td>Cluster Management</td>
                         <td class="question-topic">Should a separate management cluster with ACM be considered?</td>
                         <td><textarea data-field="10.3-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr class="add-question-row" data-section="10">
+                        <td colspan="4" class="text-center py-4">
+                            <button onclick="addQuestion(10)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 mx-auto transition-colors">
+                                <i class="fas fa-plus"></i>
+                                <span>Add Question</span>
+                            </button>
+                        </td>
                     </tr>
 
                     <!-- 11.0 Disaster Recovery -->
                     <tr class="section-header" data-section="11">
-                        <td colspan="3" class="section-title">
+                        <td colspan="4" class="section-title">
                             <i class="fas fa-umbrella"></i> 11. Disaster Recovery
                             <i class="fas fa-chevron-down toggle-icon"></i>
                         </td>
                     </tr>
                     <tr>
-                        <td>11.1 DR Requirement</td>
+                        <td>11.1</td>
+                        <td>DR Requirement</td>
                         <td class="question-topic">Does DR required?</td>
                         <td><textarea data-field="11.1-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>11.2 DR Method</td>
+                        <td>11.2</td>
+                        <td>DR Method</td>
                         <td class="question-topic">What method: active-active, active-passive?</td>
                         <td><textarea data-field="11.2-response" placeholder="Enter response..."></textarea></td>
                     </tr>
                     <tr>
-                        <td>11.3 DR Scope</td>
+                        <td>11.3</td>
+                        <td>DR Scope</td>
                         <td class="question-topic">Does all cluster needs the DR or only storage?</td>
                         <td><textarea data-field="11.3-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr class="add-question-row" data-section="11">
+                        <td colspan="4" class="text-center py-4">
+                            <button onclick="addQuestion(11)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 mx-auto transition-colors">
+                                <i class="fas fa-plus"></i>
+                                <span>Add Question</span>
+                            </button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
