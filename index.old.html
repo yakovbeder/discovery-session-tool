@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenShift Discovery Session Checklist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .table-container {
+            max-width: 100%;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        textarea {
+            width: 100%;
+            min-height: 60px;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.375rem;
+            padding: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+            resize: vertical;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 1px #2563eb;
+        }
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            background-color: #eef2ff;
+            color: #312e81;
+        }
+        .question-topic {
+            font-weight: 500;
+            color: #334155;
+        }
+        .progress-bar {
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+            height: 8px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background-color: #10b981;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        .status-complete {
+            background-color: #10b981;
+        }
+        .status-incomplete {
+            background-color: #f59e0b;
+        }
+        .status-empty {
+            background-color: #e5e7eb;
+        }
+        .floating-actions {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .floating-button {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+        }
+        .floating-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+        .save-btn {
+            background-color: #10b981;
+            color: white;
+        }
+        .export-btn {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .clear-btn {
+            background-color: #ef4444;
+            color: white;
+        }
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1001;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        .toast.show {
+            transform: translateX(0);
+        }
+        .toast.success {
+            background-color: #10b981;
+        }
+        .toast.error {
+            background-color: #ef4444;
+        }
+        .toast.info {
+            background-color: #3b82f6;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 p-4 sm:p-6 lg:p-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">OpenShift Discovery Session Checklist</h1>
+                    <p class="text-gray-600">Complete discovery session checklist for OpenShift deployment planning</p>
+                </div>
+                <div class="mt-4 sm:mt-0">
+                    <div class="flex items-center space-x-4">
+                        <div class="text-sm text-gray-600">
+                            <span id="completion-text">0% Complete</span>
+                        </div>
+                        <div class="w-32">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="bg-white shadow-md rounded-lg p-4 mb-6">
+            <div class="flex flex-wrap gap-3">
+                <button onclick="saveData()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors">
+                    <i class="fas fa-save"></i>
+                    <span>Save</span>
+                </button>
+                <button onclick="loadData()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors">
+                    <i class="fas fa-folder-open"></i>
+                    <span>Load</span>
+                </button>
+                <button onclick="exportToPDF()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors">
+                    <i class="fas fa-file-pdf"></i>
+                    <span>Export PDF</span>
+                </button>
+                <button onclick="exportToJSON()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors">
+                    <i class="fas fa-download"></i>
+                    <span>Export JSON</span>
+                </button>
+                <button onclick="clearAll()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors">
+                    <i class="fas fa-trash"></i>
+                    <span>Clear All</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Checklist Table -->
+        <div class="table-container bg-white shadow-md rounded-lg">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="w-1/6">Section</th>
+                        <th class="w-2/5">Question / Topic</th>
+                        <th class="w-1/2">Response / Decision</th>
+                    </tr>
+                </thead>
+                <tbody id="checklist-body">
+                    <!-- 1.0 Project Scope & Cluster Usage -->
+                    <tr>
+                        <td colspan="3" class="section-title">1.0 Project Scope & Cluster Usage</td>
+                    </tr>
+                    <tr>
+                        <td>1.1 Cluster Usage</td>
+                        <td class="question-topic">How many distinct OpenShift clusters are required?</td>
+                        <td><textarea data-field="1.1-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>1.1 Cluster Usage</td>
+                        <td class="question-topic">What is the designated purpose for each cluster (e.g., Non-Production, Production, Management, etc.)?</td>
+                        <td><textarea data-field="1.2-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+
+                    <!-- 2.0 Platform Architecture & Design -->
+                    <tr>
+                        <td colspan="3" class="section-title">2.0 Platform Architecture & Design</td>
+                    </tr>
+                    <tr>
+                        <td>2.1 Installation</td>
+                        <td class="question-topic">Which installation method will be used: IPI or UPI?</td>
+                        <td><textarea data-field="2.1-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>2.2 OCP Version</td>
+                        <td class="question-topic">What is the target OCP version? (if it differs between clusters, please specify for each)</td>
+                        <td><textarea data-field="2.2-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>2.3 Composition</td>
+                        <td class="question-topic">What is the mix of node types (VMs, Bare-Metal) and their roles (Master, Worker, Infra)?</td>
+                        <td><textarea data-field="2.3-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>2.4 Node Breakdown</td>
+                        <td class="question-topic">What is the planned number of nodes per cluster? Will dedicated infra nodes be used?</td>
+                        <td><textarea data-field="2.4-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>2.5 HA & etcd</td>
+                        <td class="question-topic">Can we confirm high-performance disks (SSDs/NVMe) will be available for etcd on Master nodes?</td>
+                        <td><textarea data-field="2.5-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+
+                    <!-- 3.0 Hardware & Operating System -->
+                    <tr>
+                        <td colspan="3" class="section-title">3.0 Hardware & Operating System</td>
+                    </tr>
+                     <tr>
+                        <td>3.1 Hardware</td>
+                        <td class="question-topic">What are the expectations for future hardware growth?</td>
+                        <td><textarea data-field="3.1-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                     <tr>
+                        <td>3.2 OS</td>
+                        <td class="question-topic">Are stakeholders familiar with RHCOS as the immutable OS for cluster nodes?</td>
+                        <td><textarea data-field="3.2-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>3.2 OS</td>
+                        <td class="question-topic">What RHEL version will be used for the bastion server?</td>
+                        <td><textarea data-field="3.3-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+
+                    <!-- 4.0 Networking & Load Balancing -->
+                    <tr>
+                        <td colspan="3" class="section-title">4.0 Networking & Load Balancing</td>
+                    </tr>
+                    <tr>
+                        <td>4.1 Core Networking</td>
+                        <td class="question-topic">Any non-default SDN network needs to avoid overlap? (e.g., default Pods: 10.128.0.0/14, Services: 172.30.0.0/16)</td>
+                        <td><textarea data-field="4.1-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>4.2 DNS</td>
+                        <td class="question-topic">Proposed cluster domain names? DNS server type (Windows/Linux)?</td>
+                        <td><textarea data-field="4.2-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>4.3 Ingress</td>
+                        <td class="question-topic">TLS termination is preferred at the OCP route level. Are other methods required (e.g., re-encrypt at the application level)?</td>
+                        <td><textarea data-field="4.3-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>4.4 Load Balancing</td>
+                        <td class="question-topic">What are the Load Balancing options to be considered?</td>
+                        <td><textarea data-field="4.4-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                     <tr>
+                        <td>4.5 Egress</td>
+                        <td class="question-topic">Do applications need to connect to external components (e.g., DB)?</td>
+                        <td><textarea data-field="4.5-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+
+                    <!-- 5.0 Storage Architecture -->
+                    <tr>
+                        <td colspan="3" class="section-title">5.0 Storage Architecture</td>
+                    </tr>
+                    <tr>
+                        <td>5.1 Persistent Storage</td>
+                        <td class="question-topic">What storage is available (e.g., NetApp)? Will ODF be required? Is S3 compatibility needed?</td>
+                        <td><textarea data-field="5.1-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+
+                    <!-- 6.0 Security & Compliance -->
+                    <tr>
+                        <td colspan="3" class="section-title">6.0 Security & Compliance</td>
+                    </tr>
+                    <tr>
+                        <td>6.1 Authentication</td>
+                        <td class="question-topic">Which identity provider will be integrated (LDAP (AD) / LDAPS / SSO)?</td>
+                        <td><textarea data-field="6.1-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>6.2 Authorization</td>
+                        <td class="question-topic">How will authorization be managed (Local users, AD users/groups, RBAC)?</td>
+                        <td><textarea data-field="6.2-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>6.3 Network Policies</td>
+                        <td class="question-topic">What is the strategy for implementing Network Policies for traffic segmentation?</td>
+                        <td><textarea data-field="6.3-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>6.4 Hardening</td>
+                        <td class="question-topic">Are there specific security benchmarks to follow? If so, is the Compliance Operator needed?</td>
+                        <td><textarea data-field="6.4-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>6.5 Security Tooling</td>
+                        <td class="question-topic">Is there a plan to integrate tools like Red Hat Advanced Cluster Security (ACS)?</td>
+                        <td><textarea data-field="6.5-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>6.6 Service Mesh</td>
+                        <td class="question-topic">Is Service Mesh required for mTLS?</td>
+                        <td><textarea data-field="6.6-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+
+                    <!-- 7.0 Image Management -->
+                     <tr>
+                        <td colspan="3" class="section-title">7.0 Image Management</td>
+                    </tr>
+                    <tr>
+                        <td>7.1 Installation Type</td>
+                        <td class="question-topic">What is the type of installation (disconnected / connected)?</td>
+                        <td><textarea data-field="7.1-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>7.2 Image Registry</td>
+                        <td class="question-topic">What is the image registry strategy (e.g., local on bastion, external Quay/JFrog/Harbor)?</td>
+                        <td><textarea data-field="7.2-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+
+                    <!-- 8.0 Observability -->
+                    <tr>
+                        <td colspan="3" class="section-title">8.0 Observability (Monitoring & Logging)</td>
+                    </tr>
+                    <tr>
+                        <td>8.1 Monitoring</td>
+                        <td class="question-topic">Discussion of built-in monitoring capabilities. Is user workload monitoring needed? What are the alert destinations (e.g., alert forwarding)?</td>
+                        <td><textarea data-field="8.1-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>8.2 Logging</td>
+                        <td class="question-topic">Discussion of Cluster Logging components (Loki/Vector). Is there a need to forward logs?</td>
+                        <td><textarea data-field="8.2-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>8.3 Tracing</td>
+                        <td class="question-topic">Is distributed tracing required (e.g., Tempo, Jaeger)?</td>
+                        <td><textarea data-field="8.3-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+
+                    <!-- 9.0 Platform Operations & Lifecycle -->
+                    <tr>
+                        <td colspan="3" class="section-title">9.0 Platform Operations & Lifecycle</td>
+                    </tr>
+                    <tr>
+                        <td>9.1 Node Management</td>
+                        <td class="question-topic">Procedures for adding/removing/replacing nodes</td>
+                        <td><textarea data-field="9.1-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>9.2 Upgrades</td>
+                        <td class="question-topic">What is the strategy for managing cluster upgrades and platform lifecycle?</td>
+                        <td><textarea data-field="9.2-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>9.3 NTP</td>
+                        <td class="question-topic">Can we confirm a reliable internal NTP source is available for all nodes?</td>
+                        <td><textarea data-field="9.3-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>9.4 Backup/Restore</td>
+                        <td class="question-topic">What is the strategy for backup and restore (etcd, persistent data)? Which tools?</td>
+                        <td><textarea data-field="9.4-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+
+                    <!-- 10.0 Automation & Integration -->
+                    <tr>
+                        <td colspan="3" class="section-title">10.0 Automation & Integration</td>
+                    </tr>
+                    <tr>
+                        <td>10.1 CI/CD</td>
+                        <td class="question-topic">Which existing CI/CD tools need to be integrated?</td>
+                        <td><textarea data-field="10.1-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>10.2 GitOps</td>
+                        <td class="question-topic">Is there an existing GitOps practice in use?</td>
+                        <td><textarea data-field="10.2-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>10.3 Cluster Management</td>
+                        <td class="question-topic">Should a separate management cluster with ACM be considered?</td>
+                        <td><textarea data-field="10.3-response" placeholder="Enter response..."></textarea></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Floating Action Buttons -->
+    <div class="floating-actions">
+        <button onclick="saveData()" class="floating-button save-btn" title="Save Data">
+            <i class="fas fa-save"></i>
+        </button>
+        <button onclick="exportToPDF()" class="floating-button export-btn" title="Export PDF">
+            <i class="fas fa-file-pdf"></i>
+        </button>
+        <button onclick="clearAll()" class="floating-button clear-btn" title="Clear All">
+            <i class="fas fa-trash"></i>
+        </button>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

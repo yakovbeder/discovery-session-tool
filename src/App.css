@@ -1,0 +1,87 @@
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+/* Sticky progress bar */
+.sticky-progress {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid var(--pf-v5-global--BorderColor--100, #d2d2d2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* Smooth animated progress bar fill */
+.pf-v5-c-progress__bar {
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 0.4s ease;
+}
+.pf-v5-c-progress__indicator {
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 0.4s ease;
+}
+
+/* Section title default */
+.section-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Skipped section card */
+.section-skipped {
+  border-left: 4px solid var(--pf-v5-global--disabled-color--200, #d2d2d2);
+  opacity: 0.6;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 10px,
+    rgba(0, 0, 0, 0.015) 10px,
+    rgba(0, 0, 0, 0.015) 20px
+  );
+}
+
+/* Skipped section title */
+.section-title-skipped {
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-decoration: line-through;
+  color: var(--pf-v5-global--disabled-color--100, #6a6e73);
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Card section headers */
+.pf-v5-c-card__header {
+  cursor: pointer;
+}
+
+/* Textarea within table cells */
+.pf-v5-c-table td .pf-v5-c-form-control {
+  min-height: 50px;
+}
+
+/* Compact table rows */
+.pf-v5-c-table.pf-m-compact td {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+/* Dashed border for Add Section button */
+.pf-v5-c-button.pf-m-block.pf-m-secondary {
+  border-style: dashed;
+}
+
+/* Print overrides */
+@media print {
+  .pf-v5-c-page__header,
+  .pf-v5-c-alert-group,
+  .pf-v5-c-toolbar,
+  .sticky-progress {
+    position: static !important;
+  }
+}

@@ -1,222 +1,194 @@
 # OpenShift Discovery Session Tool
 
-A modern, interactive web-based checklist tool for conducting OpenShift discovery sessions. This tool helps teams systematically gather and document requirements for OpenShift deployments.
+A modern, interactive web-based checklist tool for conducting OpenShift discovery sessions. Built with **React**, **TypeScript**, and **PatternFly** (Red Hat's design system), it helps teams systematically gather and document requirements for OpenShift deployments.
+
+![Overview](docs/screenshots/overview.png)
+
+---
+
+## Quick Start
+
+### Prerequisites
+
+- **Node.js** 18+ and **npm** (included with Node.js)
+- A modern web browser (Chrome, Firefox, Edge, Safari)
+
+### Run the tool
+
+```bash
+git clone https://github.com/yakovbeder/discovery-session-tool.git
+cd discovery-session-tool
+npm install
+npm run dev
+```
+
+Open **http://localhost:8000** in your browser.
+
+Alternatively, use the included start script:
+
+```bash
+./start.sh
+```
+
+The script installs dependencies automatically on first run.
+
+### Build for production
+
+```bash
+npm run build
+```
+
+The static files are output to `dist/` and can be served by any web server or hosted on GitHub Pages.
+
+---
 
 ## Features
 
-### 🎯 Core Functionality
-- **Interactive Checklist**: Complete discovery session checklist with 11 major sections
-- **Custom Questions**: Add custom questions to any section with automatic numbering
-- **Real-time Progress Tracking**: Visual progress bar showing completion percentage
-- **Auto-save**: Automatically saves data every 30 seconds to prevent loss
-- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
+### Checklist with collapsible sections
 
-### 💾 Data Management
-- **Local Storage**: Data is automatically saved to browser's local storage
-- **Import/Export**: Load and save data as JSON files
-- **PDF Export**: Generate professional PDF reports with subject information
-- **Clear All**: Reset all fields with confirmation dialog
-- **Custom Questions Persistence**: Custom questions are saved and restored automatically
+Each of the 10 predefined sections can be expanded or collapsed. Use **Expand All** / **Collapse All** for quick navigation. Click the section title or the toggle arrow to expand.
 
-### ⌨️ User Experience
-- **Keyboard Shortcuts**:
-  - `Ctrl/Cmd + S`: Save data
-  - `Ctrl/Cmd + O`: Load data
-  - `Ctrl/Cmd + P`: Export to PDF
-- **Toast Notifications**: Real-time feedback for all actions
-- **Floating Action Buttons**: Quick access to common functions
-- **Collapsible Sections**: Click section headers to expand/collapse
-- **Sticky Progress Bar**: Progress indicator that appears when scrolling
-- **Modern UI**: Clean, professional interface using Tailwind CSS
+![Collapsed sections](docs/screenshots/collapsed.png)
+
+### Per-section progress tracking
+
+Each section shows a badge indicating how many questions have been answered (e.g., `3/5`). A green checkmark appears when all questions in a section are complete. The overall progress bar at the top stays **sticky** as you scroll.
+
+### Mark sections as Not Applicable
+
+Toggle the **Applicable / Skipped** switch on any section to exclude it from the progress bar. Skipped sections are visually dimmed and marked clearly.
+
+### Add custom sections and questions
+
+- Click **Add Question** at the bottom of any section to add a new question with an auto-generated number
+- Click **Add Section** at the bottom of the page to create entirely new sections
+- Custom items are fully integrated: they appear in exports, receive automatic numbering, and persist across sessions
+
+### Dynamic numbering
+
+All section and question numbers are computed from position, not hardcoded. Adding, removing, or reordering items keeps numbering consistent everywhere -- in the app and in exports.
+
+### Responsive layout
+
+The interface adapts to screen size. On desktop, questions are displayed in a table layout. On mobile and tablets, they switch to a stacked card layout.
+
+![Mobile view](docs/screenshots/mobile.png)
+
+### Branded PDF export
+
+Export a professional, print-ready PDF with Red Hat branding. The PDF includes a branded header, progress summary, all sections and responses, and proper handling of skipped sections.
+
+### Data persistence and portability
+
+| Action | What it does |
+|--------|-------------|
+| **Save** | Writes to browser `localStorage` -- survives page reloads |
+| **Load** | Imports a previously exported `.json` file |
+| **Export JSON** | Downloads all data as a portable `.json` file |
+| **Export PDF** | Opens a branded print preview for saving as PDF |
+| **Clear All** | Resets everything (with confirmation) |
+
+### Keyboard shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl/Cmd + S` | Save to localStorage |
+| `Ctrl/Cmd + O` | Load from JSON file |
+| `Ctrl/Cmd + P` | Export to PDF |
+
+---
 
 ## Sections Covered
 
-1. **Project Scope & Cluster(s) Purpose**
-   - Environment size (number of clusters required)
-   - Cluster(s) purposes and designations
+| # | Section | Topics |
+|---|---------|--------|
+| 1 | Project Scope & Cluster Usage | Number of clusters, cluster purposes |
+| 2 | Platform Architecture & Design | Installation method, OCP version, node composition, HA & etcd |
+| 3 | Hardware & Operating System | Hardware growth, RHCOS, bastion RHEL version |
+| 4 | Networking & Load Balancing | SDN/CIDR, DNS, ingress/TLS, load balancing, egress |
+| 5 | Storage Architecture | NetApp, ODF, S3 compatibility |
+| 6 | Security & Compliance | Authentication, authorization, network policies, hardening, ACS, service mesh |
+| 7 | Image Management | Connected/disconnected, registry strategy |
+| 8 | Observability | Monitoring, logging (Loki/Vector), tracing (Tempo/Jaeger) |
+| 9 | Platform Operations & Lifecycle | Node management, upgrades, NTP, backup/restore |
+| 10 | Automation & Integration | CI/CD tools, GitOps, ACM |
 
-2. **Platform Architecture & Design**
-   - Current infrastructure assessment
-   - Installation method (IPI/UPI)
-   - OCP version selection
-   - Node composition and breakdown
-   - High availability and etcd requirements
+All sections are customizable -- add your own sections and questions directly from the UI.
 
-3. **Hardware & Operating System**
-   - Hardware specifications and growth expectations
-   - RHCOS awareness for nodes
-   - RHEL version for bastion server
+---
 
-4. **Networking & Load Balancing**
-   - SDN network configuration (default CIDR examples provided)
-   - DNS configuration
-   - Ingress with TLS termination preferences
-   - Load balancing options
-   - External component connectivity
+## Tech Stack
 
-5. **Storage Architecture**
-   - Available storage options (NetApp, ODF)
-   - S3 compatibility requirements
+| Layer | Technology |
+|-------|------------|
+| Framework | React 18 + TypeScript |
+| UI library | PatternFly 5 (Red Hat design system) |
+| Build tool | Vite |
+| State | React hooks with debounced localStorage sync |
+| PDF export | Browser print API with branded HTML template |
 
-6. **Security & Compliance**
-   - Authentication providers (LDAP/AD, LDAPS, SSO)
-   - Authorization (Local users, AD groups, RBAC)
-   - Network policies requirements
-   - Security hardening and compliance
-   - Service Mesh for mTLS
-
-7. **Image Management (Disconnected Environment)**
-   - Disconnected installation confirmation
-   - Image registry strategy (local bastion, external Quay/JFrog/Harbor)
-
-8. **Observability (Monitoring & Logging)**
-   - Built-in monitoring awareness
-   - User workload monitoring needs
-   - Alert forwarding requirements
-   - Cluster logging components
-   - Log forwarding requirements
-   - Distributed tracing (Tempo/Jaeger)
-
-9. **Platform Operations & Lifecycle**
-   - Node management procedures
-   - Upgrade strategies
-   - NTP requirements
-   - Backup and restore procedures
-
-10. **Automation & Integration**
-    - CI/CD tool integration
-    - GitOps implementation
-    - ACM management cluster consideration
-
-11. **Disaster Recovery**
-    - DR requirements assessment
-    - Active-active vs active-passive methods
-    - DR scope (full cluster vs storage only)
-
-## Usage
-
-### For Team Members (Recommended)
-Each team member should run the tool locally to avoid data conflicts:
-
-```bash
-# Quick setup (run this once)
-curl -sSL https://raw.githubusercontent.com/yakovbeder/discovery-session-tool/main/setup-team.sh | bash
-
-# Or manually:
-git clone https://github.com/yakovbeder/discovery-session-tool.git
-cd discovery-session-tool
-python3 server.py
-```
-
-Then open: **http://localhost:8000**
-
-### For Demo/Presentation
-Visit the live version at: **https://yakovbeder.github.io/discovery-session-tool/**
-*Note: This is for demonstration only - data is shared between all users*
-
-### Local Development
-1. Open `index.html` in a modern web browser
-2. Start filling out the checklist sections
-3. Add custom questions using the "Add Question" buttons in each section
-4. Data is automatically saved as you type
-
-### Saving and Loading
-- **Auto-save**: Data is automatically saved every 30 seconds
-- **Manual Save**: Click the "Save" button or use `Ctrl/Cmd + S`
-- **Load Data**: Click "Load" to import a previously saved JSON file
-- **Export**: Use "Export JSON" to download your data as a file
-
-### Exporting Reports
-- **PDF Export**: Click "Export PDF" to generate a printable report with subject information
-- **JSON Export**: Click "Export JSON" to download data for backup or sharing
-- **Custom Questions**: Custom questions are included in both PDF and JSON exports
-
-### Keyboard Shortcuts
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl/Cmd + S` | Save data |
-| `Ctrl/Cmd + O` | Load data |
-| `Ctrl/Cmd + P` | Export to PDF |
-
-## File Structure
+## Project Structure
 
 ```
 discovery-session-tool/
-├── index.html          # Main application
-├── script.js           # JavaScript functionality
-├── server.py           # Python HTTP server
-├── start.sh            # Quick start script
-├── package.json        # Project metadata
-├── README.md           # This documentation
-├── QUICKSTART.md       # Quick start guide
-└── .gitignore          # Git ignore rules
+├── index.html                  # Vite entry point
+├── package.json                # Dependencies and scripts
+├── vite.config.ts              # Vite configuration
+├── tsconfig.json               # TypeScript configuration
+├── start.sh                    # Quick start script
+├── server.py                   # Optional Python static server
+├── public/
+│   └── redhat-logo.svg         # Red Hat logo for masthead
+├── src/
+│   ├── main.tsx                # App entry point + PatternFly CSS import
+│   ├── App.tsx                 # Root component (modals, shortcuts, layout)
+│   ├── App.css                 # Custom styles (sticky header, animations)
+│   ├── data/
+│   │   └── checklist.ts        # Section/question definitions (single source of truth)
+│   ├── hooks/
+│   │   └── useChecklistState.ts  # State management, persistence, CRUD
+│   ├── components/
+│   │   ├── ProgressHeader.tsx  # Sticky progress bar
+│   │   ├── ChecklistToolbar.tsx  # Action buttons
+│   │   └── ChecklistView.tsx   # Collapsible cards, table/mobile layouts
+│   └── utils/
+│       └── export.ts           # JSON download and branded PDF generation
+└── docs/
+    └── screenshots/            # README screenshots
 ```
 
-## Technical Details
+## Data Format
 
-### Browser Compatibility
-- Chrome 60+
-- Firefox 55+
-- Safari 12+
-- Edge 79+
+The tool uses a backward-compatible JSON format for import/export:
 
-### Dependencies
-- **Tailwind CSS**: For styling (loaded via CDN)
-- **Font Awesome**: For icons (loaded via CDN)
-- **Google Fonts**: Inter font family (loaded via CDN)
+```json
+{
+  "timestamp": "2026-03-03T18:00:00.000Z",
+  "version": "2.0",
+  "sections": {
+    "1.1": { "response": "3 clusters" },
+    "1.2": { "response": "Production, Staging, Management" }
+  },
+  "customSections": [],
+  "customQuestions": {},
+  "skippedSections": ["5.0"]
+}
+```
 
-### Data Storage
-- Uses browser's `localStorage` for automatic data persistence
-- JSON format for import/export functionality
-- No server required - runs entirely in the browser
+Files exported from the old v1.0 tool can be imported into this version.
 
-## Customization
-
-### Adding New Sections
-To add new sections to the checklist:
-
-1. Add the HTML structure in `index.html`
-2. Update the `sections` array in `script.js` (generatePDFHTML method)
-3. Add questions to the `questions` object in `script.js`
-4. Add subjects to the `subjects` object in `script.js`
-
-*Note: The tool currently includes 11 major sections covering all aspects of OpenShift discovery.*
-
-### Adding Custom Questions
-Users can add custom questions to any section:
-1. Click the "Add Question" button at the end of any section
-2. Fill in the Subject field (e.g., "Cluster Usage", "Hardware")
-3. Enter your custom question text
-4. Add your response
-5. Custom questions are automatically numbered and saved
-
-### Styling
-The tool uses Tailwind CSS classes. You can customize the appearance by:
-- Modifying the CSS in the `<style>` section of `index.html`
-- Adding custom Tailwind classes
-- Overriding specific component styles
+---
 
 ## Contributing
 
-To contribute to this tool:
-
 1. Fork the repository
 2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+3. Make your changes and verify with `npm run build`
+4. Submit a pull request
 
 ## License
 
-This tool is provided as-is for educational and professional use. Feel free to modify and distribute as needed.
-
-## Support
-
-For issues or questions:
-1. Check the browser console for error messages
-2. Ensure you're using a supported browser
-3. Try clearing browser cache and local storage
-4. Verify all files are present in the directory
+MIT
 
 ---
 

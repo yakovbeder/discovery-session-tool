@@ -1,13 +1,14 @@
 {
   "name": "openshift-discovery-session-tool",
-  "version": "1.0.0",
-  "description": "A modern, interactive web-based checklist tool for conducting OpenShift discovery sessions with custom questions support",
-  "main": "index.html",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "description": "A modern, interactive web-based checklist tool for conducting OpenShift discovery sessions",
   "scripts": {
-    "start": "python3 server.py",
-    "start:python": "python server.py",
-    "serve": "python3 -m http.server 8000",
-    "dev": "python3 server.py"
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "serve": "python3 server.py"
   },
   "keywords": [
     "openshift",
@@ -15,31 +16,21 @@
     "checklist",
     "kubernetes",
     "redhat",
-    "deployment",
-    "planning",
-    "custom-questions",
-    "pdf-export",
-    "collapsible-sections"
+    "patternfly"
   ],
-  "author": "OpenShift Discovery Tool",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/your-org/openshift-discovery-session-tool.git"
+  "dependencies": {
+    "@patternfly/react-core": "^5.4.0",
+    "@patternfly/react-icons": "^5.4.0",
+    "@patternfly/react-table": "^5.4.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
-  "bugs": {
-    "url": "https://github.com/your-org/openshift-discovery-session-tool/issues"
-  },
-  "homepage": "https://github.com/your-org/openshift-discovery-session-tool#readme",
-  "engines": {
-    "node": ">=14.0.0"
-  },
-  "dependencies": {},
-  "devDependencies": {},
-  "browserslist": [
-    "Chrome >= 60",
-    "Firefox >= 55",
-    "Safari >= 12",
-    "Edge >= 79"
-  ]
-} 
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "typescript": "~5.6.0",
+    "vite": "^6.0.0"
+  }
+}
