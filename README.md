@@ -6,39 +6,79 @@ A modern, interactive web-based checklist tool for conducting OpenShift discover
 
 ---
 
+## Live Demo
+
+Try the tool instantly without installing anything:
+
+**https://yakovbeder.github.io/discovery-session-tool/**
+
+> **Note:** The live demo is for demonstration/presentation purposes only. Data is stored in your browser's local storage and is not shared with a server, but anyone using the same browser profile on the same machine will see the same data.
+
+---
+
 ## Quick Start
 
 ### Prerequisites
 
-- **Node.js** 18+ and **npm** (included with Node.js)
-- A modern web browser (Chrome, Firefox, Edge, Safari)
+You need **Node.js** (version 18 or newer) installed on your machine. Node.js includes **npm** (the package manager) automatically.
+
+**Install Node.js:**
+
+- **RHEL / Fedora / CentOS:**
+  ```bash
+  sudo dnf install -y nodejs
+  ```
+- **Ubuntu / Debian:**
+  ```bash
+  sudo apt update && sudo apt install -y nodejs npm
+  ```
+- **macOS (with Homebrew):**
+  ```bash
+  brew install node
+  ```
+- **Any OS (official installer):** Download from https://nodejs.org (choose the LTS version)
+
+Verify the installation:
+```bash
+node --version    # should show v18.x or higher
+npm --version     # should show 9.x or higher
+```
 
 ### Run the tool
 
 ```bash
+# 1. Clone the repository
 git clone https://github.com/yakovbeder/discovery-session-tool.git
 cd discovery-session-tool
-npm install
-npm run dev
+
+# 2. Start the tool (installs dependencies automatically on first run)
+./start.sh
 ```
 
 Open **http://localhost:8000** in your browser.
 
-Alternatively, use the included start script:
+That's it. The `start.sh` script handles everything: it checks for dependencies, installs them if needed, and starts the development server.
+
+### Manual setup (alternative)
+
+If you prefer to run the commands yourself:
 
 ```bash
-./start.sh
+git clone https://github.com/yakovbeder/discovery-session-tool.git
+cd discovery-session-tool
+npm install          # install dependencies (only needed once)
+npm run dev          # start the development server
 ```
 
-The script installs dependencies automatically on first run.
-
 ### Build for production
+
+To create optimized static files for hosting:
 
 ```bash
 npm run build
 ```
 
-The static files are output to `dist/` and can be served by any web server or hosted on GitHub Pages.
+The output goes to `dist/`. You can serve it with any web server (nginx, Apache, GitHub Pages, etc.).
 
 ---
 
@@ -46,7 +86,7 @@ The static files are output to `dist/` and can be served by any web server or ho
 
 ### Checklist with collapsible sections
 
-Each of the 10 predefined sections can be expanded or collapsed. Use **Expand All** / **Collapse All** for quick navigation. Click the section title or the toggle arrow to expand.
+Each of the 10 predefined sections can be expanded or collapsed. Use **Expand All** / **Collapse All** for quick navigation. Click anywhere on the section title or the toggle arrow to expand.
 
 ![Collapsed sections](docs/screenshots/collapsed.png)
 
@@ -71,8 +111,6 @@ All section and question numbers are computed from position, not hardcoded. Addi
 ### Responsive layout
 
 The interface adapts to screen size. On desktop, questions are displayed in a table layout. On mobile and tablets, they switch to a stacked card layout.
-
-![Mobile view](docs/screenshots/mobile.png)
 
 ### Branded PDF export
 
