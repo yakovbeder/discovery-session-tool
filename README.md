@@ -228,7 +228,7 @@ Files exported from the old v1.0 tool can be imported into this version.
 
 ## License
 
-MIT
+Apache License 2.0 -- see [LICENSE](LICENSE) for details.
 
 ---
 
