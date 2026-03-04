@@ -5,9 +5,18 @@
 
 set -e
 
-IMAGE_NAME="quay.io/rh-ee-ybeder/discovery-session-tool"
+IMAGE_BASE="quay.io/rh-ee-ybeder/discovery-session-tool"
 CONTAINER_NAME="discovery-session-tool"
 PORT="8080"
+
+# Detect architecture for correct image tag
+SYSTEM_ARCH=$(uname -m)
+case $SYSTEM_ARCH in
+    x86_64)        ARCH="amd64" ;;
+    aarch64|arm64) ARCH="arm64" ;;
+    *)             ARCH="amd64" ;;
+esac
+IMAGE_NAME="${IMAGE_BASE}:latest-${ARCH}"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -59,7 +68,7 @@ do_start() {
     $RUNTIME rm -f "${CONTAINER_NAME}" 2>/dev/null || true
 
     print_status "Pulling latest image..."
-    if $RUNTIME pull "${IMAGE_NAME}:latest" >/dev/null 2>&1; then
+    if $RUNTIME pull "${IMAGE_NAME}" >/dev/null 2>&1; then
         print_success "Image up to date"
     else
         print_warning "Could not pull latest image, using cached version"
@@ -69,7 +78,7 @@ do_start() {
     $RUNTIME run -d \
         --name "${CONTAINER_NAME}" \
         -p "${PORT}:8080" \
-        "${IMAGE_NAME}:latest" >/dev/null
+        "${IMAGE_NAME}" >/dev/null
 
     sleep 1
 
@@ -123,6 +132,7 @@ do_status() {
     fi
     echo ""
     echo "  Container:    ${CONTAINER_NAME}"
+    echo "  Image:        ${IMAGE_NAME}"
     echo "  Runtime:      ${RUNTIME}"
     echo ""
     echo "  Commands:"

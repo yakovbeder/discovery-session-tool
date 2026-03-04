@@ -40,8 +40,14 @@ Manage the app with: `./start.sh --stop`, `./start.sh --restart`, `./start.sh --
 Or run directly without cloning:
 
 ```bash
-podman run -d --name discovery-session-tool -p 8080:8080 quay.io/rh-ee-ybeder/discovery-session-tool
+# On Linux (x86_64)
+podman run -d --name discovery-session-tool -p 8080:8080 quay.io/rh-ee-ybeder/discovery-session-tool:latest-amd64
+
+# On Mac (Apple Silicon)
+docker run -d --name discovery-session-tool -p 8080:8080 quay.io/rh-ee-ybeder/discovery-session-tool:latest-arm64
 ```
+
+The `start.sh` script auto-detects your architecture and pulls the correct image.
 
 ### Option 2: Run from source (for development)
 
