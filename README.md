@@ -18,67 +18,48 @@ Try the tool instantly without installing anything:
 
 ## Quick Start
 
-### Prerequisites
+### Option 1: Run with Podman (easiest -- no Node.js needed)
 
-You need **Node.js** (version 18 or newer) installed on your machine. Node.js includes **npm** (the package manager) automatically.
-
-**Install Node.js:**
-
-- **RHEL / Fedora / CentOS:**
-  ```bash
-  sudo dnf install -y nodejs
-  ```
-- **Ubuntu / Debian:**
-  ```bash
-  sudo apt update && sudo apt install -y nodejs npm
-  ```
-- **macOS (with Homebrew):**
-  ```bash
-  brew install node
-  ```
-- **Any OS (official installer):** Download from https://nodejs.org (choose the LTS version)
-
-Verify the installation:
 ```bash
-node --version    # should show v18.x or higher
-npm --version     # should show 9.x or higher
+podman run --rm -p 8080:8080 quay.io/rh-ee-ybeder/discovery-session-tool
 ```
 
-### Run the tool
+Open **http://localhost:8080** in your browser. That's it.
+
+Works with Docker too:
 
 ```bash
-# 1. Clone the repository
+docker run --rm -p 8080:8080 quay.io/rh-ee-ybeder/discovery-session-tool
+```
+
+### Option 2: Run from source
+
+**Prerequisites:** Node.js 18+ (`sudo dnf install -y nodejs` on RHEL/Fedora, or download from https://nodejs.org)
+
+```bash
 git clone https://github.com/yakovbeder/discovery-session-tool.git
 cd discovery-session-tool
-
-# 2. Start the tool (installs dependencies automatically on first run)
 ./start.sh
 ```
 
-Open **http://localhost:8000** in your browser.
+Open **http://localhost:8000** in your browser. The script installs dependencies automatically on first run.
 
-That's it. The `start.sh` script handles everything: it checks for dependencies, installs them if needed, and starts the development server.
-
-### Manual setup (alternative)
-
-If you prefer to run the commands yourself:
+### Option 3: Build the container locally
 
 ```bash
 git clone https://github.com/yakovbeder/discovery-session-tool.git
 cd discovery-session-tool
-npm install          # install dependencies (only needed once)
-npm run dev          # start the development server
+podman build -t discovery-session-tool .
+podman run --rm -p 8080:8080 discovery-session-tool
 ```
 
-### Build for production
-
-To create optimized static files for hosting:
+### Build static files for hosting
 
 ```bash
-npm run build
+npm install && npm run build
 ```
 
-The output goes to `dist/`. You can serve it with any web server (nginx, Apache, GitHub Pages, etc.).
+The output goes to `dist/`. Serve with any web server (nginx, Apache, GitHub Pages, etc.).
 
 ---
 

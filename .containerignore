@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.git/
+.github/
+.vscode/
+.idea/
+docs/
+*.md
+*.log
+.env*
+tsconfig.tsbuildinfo
+index.old.html
+script.old.js
