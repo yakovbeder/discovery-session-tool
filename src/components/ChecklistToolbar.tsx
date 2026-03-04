@@ -11,6 +11,8 @@ import {
   FilePdfIcon,
   DownloadIcon,
   TrashIcon,
+  ListIcon,
+  UndoIcon,
 } from '@patternfly/react-icons';
 
 interface ChecklistToolbarProps {
@@ -19,6 +21,10 @@ interface ChecklistToolbarProps {
   onExportPDF: () => void;
   onExportJSON: () => void;
   onClear: () => void;
+  onOpenGenerator: () => void;
+  onResetToTemplate: () => void;
+  isUsingCustomChecklist: boolean;
+  isGeneratorOpen: boolean;
 }
 
 export default function ChecklistToolbar({
@@ -27,6 +33,10 @@ export default function ChecklistToolbar({
   onExportPDF,
   onExportJSON,
   onClear,
+  onOpenGenerator,
+  onResetToTemplate,
+  isUsingCustomChecklist,
+  isGeneratorOpen,
 }: ChecklistToolbarProps) {
   return (
     <Toolbar>
@@ -64,6 +74,31 @@ export default function ChecklistToolbar({
               Export JSON
             </Button>
           </ToolbarItem>
+        </ToolbarGroup>
+        <ToolbarItem variant="separator" />
+        <ToolbarGroup>
+          {!isGeneratorOpen && (
+            <ToolbarItem>
+              <Button
+                variant="secondary"
+                icon={<ListIcon />}
+                onClick={onOpenGenerator}
+              >
+                New Checklist
+              </Button>
+            </ToolbarItem>
+          )}
+          {isUsingCustomChecklist && !isGeneratorOpen && (
+            <ToolbarItem>
+              <Button
+                variant="link"
+                icon={<UndoIcon />}
+                onClick={onResetToTemplate}
+              >
+                Reset to Template
+              </Button>
+            </ToolbarItem>
+          )}
         </ToolbarGroup>
         <ToolbarItem variant="separator" />
         <ToolbarItem>

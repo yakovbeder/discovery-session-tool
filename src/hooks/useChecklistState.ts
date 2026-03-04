@@ -1,6 +1,8 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import {
   checklist,
+  DEFAULT_TITLE,
+  DEFAULT_SUBTITLE,
   type StoredData,
   type Section,
   type Question,
@@ -10,6 +12,9 @@ const STORAGE_KEY = 'discoverySessionData';
 const DEBOUNCE_MS = 500;
 
 interface LoadedState {
+  documentTitle: string;
+  documentSubtitle: string;
+  generatorSections: Section[] | null;
   responses: Record<string, string>;
   customSections: Section[];
   customQuestions: Record<string, Question[]>;
@@ -21,6 +26,9 @@ function loadFromStorage(): LoadedState {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw)
       return {
+        documentTitle: DEFAULT_TITLE,
+        documentSubtitle: DEFAULT_SUBTITLE,
+        generatorSections: null,
         responses: {},
         customSections: [],
         customQuestions: {},
@@ -34,6 +42,9 @@ function loadFromStorage(): LoadedState {
       }
     }
     return {
+      documentTitle: data.documentTitle || DEFAULT_TITLE,
+      documentSubtitle: data.documentSubtitle || DEFAULT_SUBTITLE,
+      generatorSections: data.generatorSections || null,
       responses,
       customSections: data.customSections || [],
       customQuestions: data.customQuestions || {},
@@ -41,6 +52,9 @@ function loadFromStorage(): LoadedState {
     };
   } catch {
     return {
+      documentTitle: DEFAULT_TITLE,
+      documentSubtitle: DEFAULT_SUBTITLE,
+      generatorSections: null,
       responses: {},
       customSections: [],
       customQuestions: {},
@@ -50,6 +64,9 @@ function loadFromStorage(): LoadedState {
 }
 
 function toStoredFormat(
+  documentTitle: string,
+  documentSubtitle: string,
+  generatorSections: Section[] | null,
   responses: Record<string, string>,
   customSections: Section[],
   customQuestions: Record<string, Question[]>,
@@ -62,6 +79,11 @@ function toStoredFormat(
   return {
     timestamp: new Date().toISOString(),
     version: '2.0',
+    documentTitle:
+      documentTitle !== DEFAULT_TITLE ? documentTitle : undefined,
+    documentSubtitle:
+      documentSubtitle !== DEFAULT_SUBTITLE ? documentSubtitle : undefined,
+    generatorSections: generatorSections || undefined,
     sections,
     customSections: customSections.length > 0 ? customSections : undefined,
     customQuestions:
@@ -73,6 +95,15 @@ function toStoredFormat(
 
 export function useChecklistState() {
   const initial = useRef(loadFromStorage());
+  const [documentTitle, setDocumentTitle] = useState(
+    initial.current.documentTitle,
+  );
+  const [documentSubtitle, setDocumentSubtitle] = useState(
+    initial.current.documentSubtitle,
+  );
+  const [generatorSections, setGeneratorSections] = useState<Section[] | null>(
+    initial.current.generatorSections,
+  );
   const [responses, setResponses] = useState<Record<string, string>>(
     initial.current.responses,
   );
@@ -87,8 +118,10 @@ export function useChecklistState() {
   );
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const baseSections = generatorSections ?? checklist;
+
   const allSections = useMemo<Section[]>(() => {
-    const merged = checklist.map((s) => ({
+    const merged = baseSections.map((s) => ({
       ...s,
       questions: [...s.questions, ...(customQuestions[s.id] || [])],
     }));
@@ -97,16 +130,19 @@ export function useChecklistState() {
       questions: [...s.questions, ...(customQuestions[s.id] || [])],
     }));
     return [...merged, ...custom];
-  }, [customSections, customQuestions]);
+  }, [baseSections, customSections, customQuestions]);
 
   const saveToStorage = useCallback(
     (
+      dt: string,
+      ds: string,
+      gs: Section[] | null,
       r: Record<string, string>,
       cs: Section[],
       cq: Record<string, Question[]>,
       ss: Set<string>,
     ) => {
-      const stored = toStoredFormat(r, cs, cq, ss);
+      const stored = toStoredFormat(dt, ds, gs, r, cs, cq, ss);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
     },
     [],
@@ -115,12 +151,29 @@ export function useChecklistState() {
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
-      saveToStorage(responses, customSections, customQuestions, skippedSections);
+      saveToStorage(
+        documentTitle,
+        documentSubtitle,
+        generatorSections,
+        responses,
+        customSections,
+        customQuestions,
+        skippedSections,
+      );
     }, DEBOUNCE_MS);
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-  }, [responses, customSections, customQuestions, skippedSections, saveToStorage]);
+  }, [
+    documentTitle,
+    documentSubtitle,
+    generatorSections,
+    responses,
+    customSections,
+    customQuestions,
+    skippedSections,
+    saveToStorage,
+  ]);
 
   const updateResponse = useCallback((key: string, value: string) => {
     setResponses((prev) => ({ ...prev, [key]: value }));
@@ -155,8 +208,24 @@ export function useChecklistState() {
 
   const collectData = useCallback(
     (): StoredData =>
-      toStoredFormat(responses, customSections, customQuestions, skippedSections),
-    [responses, customSections, customQuestions, skippedSections],
+      toStoredFormat(
+        documentTitle,
+        documentSubtitle,
+        generatorSections,
+        responses,
+        customSections,
+        customQuestions,
+        skippedSections,
+      ),
+    [
+      documentTitle,
+      documentSubtitle,
+      generatorSections,
+      responses,
+      customSections,
+      customQuestions,
+      skippedSections,
+    ],
   );
 
   const importData = useCallback((data: StoredData) => {
@@ -165,6 +234,9 @@ export function useChecklistState() {
     for (const [key, val] of Object.entries(data.sections)) {
       if (val?.response) newResponses[key] = val.response;
     }
+    setDocumentTitle(data.documentTitle || DEFAULT_TITLE);
+    setDocumentSubtitle(data.documentSubtitle || DEFAULT_SUBTITLE);
+    setGeneratorSections(data.generatorSections || null);
     setResponses(newResponses);
     setCustomSections(data.customSections || []);
     setCustomQuestions(data.customQuestions || {});
@@ -172,6 +244,9 @@ export function useChecklistState() {
   }, []);
 
   const clearAll = useCallback(() => {
+    setDocumentTitle(DEFAULT_TITLE);
+    setDocumentSubtitle(DEFAULT_SUBTITLE);
+    setGeneratorSections(null);
     setResponses({});
     setCustomSections([]);
     setCustomQuestions({});
@@ -180,8 +255,25 @@ export function useChecklistState() {
   }, []);
 
   const saveNow = useCallback(() => {
-    saveToStorage(responses, customSections, customQuestions, skippedSections);
-  }, [responses, customSections, customQuestions, skippedSections, saveToStorage]);
+    saveToStorage(
+      documentTitle,
+      documentSubtitle,
+      generatorSections,
+      responses,
+      customSections,
+      customQuestions,
+      skippedSections,
+    );
+  }, [
+    documentTitle,
+    documentSubtitle,
+    generatorSections,
+    responses,
+    customSections,
+    customQuestions,
+    skippedSections,
+    saveToStorage,
+  ]);
 
   const toggleSkipSection = useCallback((sectionId: string) => {
     setSkippedSections((prev) => {
@@ -240,19 +332,47 @@ export function useChecklistState() {
     [],
   );
 
-  const deleteQuestion = useCallback((sectionId: string, questionKey: string) => {
-    setCustomQuestions((prev) => ({
-      ...prev,
-      [sectionId]: (prev[sectionId] || []).filter((q) => q.key !== questionKey),
-    }));
-    setResponses((prev) => {
-      const next = { ...prev };
-      delete next[questionKey];
-      return next;
-    });
+  const deleteQuestion = useCallback(
+    (sectionId: string, questionKey: string) => {
+      setCustomQuestions((prev) => ({
+        ...prev,
+        [sectionId]: (prev[sectionId] || []).filter(
+          (q) => q.key !== questionKey,
+        ),
+      }));
+      setResponses((prev) => {
+        const next = { ...prev };
+        delete next[questionKey];
+        return next;
+      });
+    },
+    [],
+  );
+
+  // --- Generator: replace the entire base checklist ---
+  const applyGeneratorSections = useCallback((sections: Section[]) => {
+    setGeneratorSections(sections);
+    setCustomSections([]);
+    setCustomQuestions({});
+    setResponses({});
+    setSkippedSections(new Set());
   }, []);
 
+  const resetToTemplate = useCallback(() => {
+    setGeneratorSections(null);
+    setCustomSections([]);
+    setCustomQuestions({});
+    setResponses({});
+    setSkippedSections(new Set());
+  }, []);
+
+  const isUsingCustomChecklist = generatorSections !== null;
+
   return {
+    documentTitle,
+    documentSubtitle,
+    setDocumentTitle,
+    setDocumentSubtitle,
     responses,
     allSections,
     skippedSections,
@@ -268,5 +388,8 @@ export function useChecklistState() {
     addQuestion,
     deleteQuestion,
     toggleSkipSection,
+    applyGeneratorSections,
+    resetToTemplate,
+    isUsingCustomChecklist,
   };
 }

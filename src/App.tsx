@@ -19,12 +19,13 @@ import {
   MastheadBrand,
   Brand,
 } from '@patternfly/react-core';
-import type { StoredData } from './data/checklist';
+import type { StoredData, Section } from './data/checklist';
 import { useChecklistState } from './hooks/useChecklistState';
 import { downloadJSON, printPDF } from './utils/export';
 import ProgressHeader from './components/ProgressHeader';
 import ChecklistToolbar from './components/ChecklistToolbar';
 import ChecklistView from './components/ChecklistView';
+import ChecklistGenerator from './components/ChecklistGenerator';
 
 import redhatLogo from '/redhat-logo.svg';
 
@@ -38,6 +39,10 @@ let alertId = 0;
 
 export default function App() {
   const {
+    documentTitle,
+    documentSubtitle,
+    setDocumentTitle,
+    setDocumentSubtitle,
     responses,
     allSections,
     skippedSections,
@@ -53,17 +58,19 @@ export default function App() {
     addQuestion,
     deleteQuestion,
     toggleSkipSection,
+    applyGeneratorSections,
+    resetToTemplate,
+    isUsingCustomChecklist,
   } = useChecklistState();
 
   const [alerts, setAlerts] = useState<ToastAlert[]>([]);
   const [isClearModalOpen, setIsClearModalOpen] = useState(false);
+  const [isGeneratorOpen, setIsGeneratorOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Add Section modal state
   const [isSectionModalOpen, setIsSectionModalOpen] = useState(false);
   const [newSectionTitle, setNewSectionTitle] = useState('');
 
-  // Add Question modal state
   const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
   const [questionTargetSection, setQuestionTargetSection] = useState('');
   const [newQuestionTopic, setNewQuestionTopic] = useState('');
@@ -80,8 +87,6 @@ export default function App() {
   const removeAlert = useCallback((key: number) => {
     setAlerts((prev) => prev.filter((a) => a.key !== key));
   }, []);
-
-  // --- Action handlers ---
 
   const handleSave = useCallback(() => {
     saveNow();
@@ -101,6 +106,7 @@ export default function App() {
         try {
           const data: StoredData = JSON.parse(ev.target?.result as string);
           importData(data);
+          setIsGeneratorOpen(false);
           showToast('Data loaded successfully!', AlertVariant.success);
         } catch {
           showToast(
@@ -128,10 +134,9 @@ export default function App() {
   const handleClearAll = useCallback(() => {
     clearAll();
     setIsClearModalOpen(false);
+    setIsGeneratorOpen(false);
     showToast('All data cleared successfully!', AlertVariant.success);
   }, [clearAll, showToast]);
-
-  // --- Add Section ---
 
   const openAddSection = useCallback(() => {
     setNewSectionTitle('');
@@ -144,8 +149,6 @@ export default function App() {
     setIsSectionModalOpen(false);
     showToast('Section added!', AlertVariant.success);
   }, [newSectionTitle, addSection, showToast]);
-
-  // --- Add Question ---
 
   const openAddQuestion = useCallback((sectionId: string) => {
     setQuestionTargetSection(sectionId);
@@ -163,9 +166,30 @@ export default function App() {
     );
     setIsQuestionModalOpen(false);
     showToast('Question added!', AlertVariant.success);
-  }, [questionTargetSection, newQuestionTopic, newQuestionText, addQuestion, showToast]);
+  }, [
+    questionTargetSection,
+    newQuestionTopic,
+    newQuestionText,
+    addQuestion,
+    showToast,
+  ]);
 
-  // --- Keyboard shortcuts ---
+  const handleGeneratorApply = useCallback(
+    (sections: Section[]) => {
+      applyGeneratorSections(sections);
+      setIsGeneratorOpen(false);
+      showToast(
+        'Custom checklist created! Start filling in your responses.',
+        AlertVariant.success,
+      );
+    },
+    [applyGeneratorSections, showToast],
+  );
+
+  const handleResetToTemplate = useCallback(() => {
+    resetToTemplate();
+    showToast('Reset to OpenShift template.', AlertVariant.info);
+  }, [resetToTemplate, showToast]);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -189,8 +213,6 @@ export default function App() {
     return () => document.removeEventListener('keydown', handler);
   }, [handleSave, handleLoad, handleExportPDF]);
 
-  // --- Render ---
-
   const header = (
     <Masthead>
       <MastheadMain>
@@ -211,7 +233,13 @@ export default function App() {
         variant={PageSectionVariants.light}
         className="sticky-progress"
       >
-        <ProgressHeader progress={progress} />
+        <ProgressHeader
+          progress={progress}
+          title={documentTitle}
+          subtitle={documentSubtitle}
+          onTitleChange={setDocumentTitle}
+          onSubtitleChange={setDocumentSubtitle}
+        />
       </PageSection>
 
       <PageSection variant={PageSectionVariants.light}>
@@ -221,25 +249,35 @@ export default function App() {
           onExportPDF={handleExportPDF}
           onExportJSON={handleExportJSON}
           onClear={() => setIsClearModalOpen(true)}
+          onOpenGenerator={() => setIsGeneratorOpen(true)}
+          onResetToTemplate={handleResetToTemplate}
+          isUsingCustomChecklist={isUsingCustomChecklist}
+          isGeneratorOpen={isGeneratorOpen}
         />
       </PageSection>
 
       <PageSection isFilled>
-        <ChecklistView
-          allSections={allSections}
-          responses={responses}
-          skippedSections={skippedSections}
-          onUpdateResponse={updateResponse}
-          sectionProgress={sectionProgress}
-          onAddQuestion={openAddQuestion}
-          onAddSection={openAddSection}
-          onDeleteQuestion={deleteQuestion}
-          onDeleteSection={deleteSection}
-          onToggleSkip={toggleSkipSection}
-        />
+        {isGeneratorOpen ? (
+          <ChecklistGenerator
+            onApply={handleGeneratorApply}
+            onCancel={() => setIsGeneratorOpen(false)}
+          />
+        ) : (
+          <ChecklistView
+            allSections={allSections}
+            responses={responses}
+            skippedSections={skippedSections}
+            onUpdateResponse={updateResponse}
+            sectionProgress={sectionProgress}
+            onAddQuestion={openAddQuestion}
+            onAddSection={openAddSection}
+            onDeleteQuestion={deleteQuestion}
+            onDeleteSection={deleteSection}
+            onToggleSkip={toggleSkipSection}
+          />
+        )}
       </PageSection>
 
-      {/* Hidden file input for JSON import */}
       <input
         type="file"
         ref={fileInputRef}
@@ -249,7 +287,6 @@ export default function App() {
         aria-label="Load JSON file"
       />
 
-      {/* Toast notifications */}
       <AlertGroup isToast isLiveRegion>
         {alerts.map((a) => (
           <Alert
@@ -265,7 +302,6 @@ export default function App() {
         ))}
       </AlertGroup>
 
-      {/* Clear All confirmation modal */}
       <Modal
         variant={ModalVariant.small}
         title="Clear All Data"
@@ -288,7 +324,6 @@ export default function App() {
         Are you sure you want to clear all data? This action cannot be undone.
       </Modal>
 
-      {/* Add Section modal */}
       <Modal
         variant={ModalVariant.small}
         title="Add Section"
@@ -319,14 +354,13 @@ export default function App() {
               id="section-title"
               value={newSectionTitle}
               onChange={(_e, val) => setNewSectionTitle(val)}
-              placeholder="e.g., 11.0 Disaster Recovery"
+              placeholder="e.g., Disaster Recovery"
               autoFocus
             />
           </FormGroup>
         </Form>
       </Modal>
 
-      {/* Add Question modal */}
       <Modal
         variant={ModalVariant.small}
         title="Add Question"
@@ -357,14 +391,10 @@ export default function App() {
               id="question-topic"
               value={newQuestionTopic}
               onChange={(_e, val) => setNewQuestionTopic(val)}
-              placeholder='e.g., "11.1 DR Strategy" (optional)'
+              placeholder='e.g., "DR Strategy" (optional)'
             />
           </FormGroup>
-          <FormGroup
-            label="Question"
-            isRequired
-            fieldId="question-text"
-          >
+          <FormGroup label="Question" isRequired fieldId="question-text">
             <TextArea
               id="question-text"
               value={newQuestionText}

@@ -15,11 +15,18 @@ export interface Section {
 export interface StoredData {
   timestamp: string;
   version: string;
+  documentTitle?: string;
+  documentSubtitle?: string;
+  generatorSections?: Section[];
   sections: Record<string, Record<string, string>>;
   customSections?: Section[];
   customQuestions?: Record<string, Question[]>;
   skippedSections?: string[];
 }
+
+export const DEFAULT_TITLE = 'OpenShift Discovery Session Checklist';
+export const DEFAULT_SUBTITLE =
+  'Complete discovery session checklist for OpenShift deployment planning';
 
 export function formatSectionNum(sectionIdx: number): string {
   return `${sectionIdx + 1}`;
