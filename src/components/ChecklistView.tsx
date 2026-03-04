@@ -95,7 +95,7 @@ export default function ChecklistView({
   const [expanded, setExpanded] = useState<Record<string, boolean>>(() => {
     const init: Record<string, boolean> = {};
     allSections.forEach((s) => {
-      init[s.id] = true;
+      init[s.id] = false;
     });
     return init;
   });
@@ -104,7 +104,7 @@ export default function ChecklistView({
     setExpanded((prev) => {
       const next = { ...prev };
       allSections.forEach((s) => {
-        if (!(s.id in next)) next[s.id] = true;
+        if (!(s.id in next)) next[s.id] = false;
       });
       return next;
     });
