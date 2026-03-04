@@ -18,28 +18,39 @@ Try the tool instantly without installing anything:
 
 ## Quick Start
 
-### Option 1: Run with Podman (easiest -- no Node.js needed)
+### Option 1: Run with Podman or Docker (easiest -- no Node.js needed)
 
 ```bash
-podman run --rm -p 8080:8080 quay.io/rh-ee-ybeder/discovery-session-tool
+git clone https://github.com/yakovbeder/discovery-session-tool.git
+cd discovery-session-tool
+./start.sh
 ```
 
-Open **http://localhost:8080** in your browser. That's it.
+The script auto-detects Podman or Docker, pulls the image, and starts the app. You'll see:
 
-Works with Docker too:
+```
+[OK] Discovery Session Tool is running
+
+  Local URL:    http://localhost:8080
+  Network URL:  http://<your-ip>:8080
+```
+
+Manage the app with: `./start.sh --stop`, `./start.sh --restart`, `./start.sh --status`, `./start.sh --logs`.
+
+Or run directly without cloning:
 
 ```bash
-docker run --rm -p 8080:8080 quay.io/rh-ee-ybeder/discovery-session-tool
+podman run -d --name discovery-session-tool -p 8080:8080 quay.io/rh-ee-ybeder/discovery-session-tool
 ```
 
-### Option 2: Run from source
+### Option 2: Run from source (for development)
 
 **Prerequisites:** Node.js 18+ (`sudo dnf install -y nodejs` on RHEL/Fedora, or download from https://nodejs.org)
 
 ```bash
 git clone https://github.com/yakovbeder/discovery-session-tool.git
 cd discovery-session-tool
-./start.sh
+./dev.sh
 ```
 
 Open **http://localhost:8000** in your browser. The script installs dependencies automatically on first run.
