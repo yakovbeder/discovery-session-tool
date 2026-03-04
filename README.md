@@ -84,9 +84,19 @@ The output goes to `dist/`. You can serve it with any web server (nginx, Apache,
 
 ## Features
 
-### Checklist with collapsible sections
+### Custom document title
 
-Each of the 10 predefined sections can be expanded or collapsed. Use **Expand All** / **Collapse All** for quick navigation. Click anywhere on the section title or the toggle arrow to expand.
+Click the **pencil icon** next to the title to edit the document title and subtitle. Your custom title appears in the app header, PDF export, and footer. Persisted across sessions.
+
+### Checklist Generator
+
+Click **"New Checklist"** in the toolbar to build a checklist from scratch. Define your own sections and questions, reorder with arrow buttons, and click **"Create Checklist"** to start your session. Use **"Reset to Template"** to go back to the default OpenShift checklist.
+
+![Checklist Generator](docs/screenshots/generator.png)
+
+### Collapsible sections
+
+Each section can be expanded or collapsed. Use **Expand All** / **Collapse All** for quick navigation. Click anywhere on the section title or the toggle arrow to expand.
 
 ![Collapsed sections](docs/screenshots/collapsed.png)
 
@@ -114,7 +124,7 @@ The interface adapts to screen size. On desktop, questions are displayed in a ta
 
 ### Branded PDF export
 
-Export a professional, print-ready PDF with Red Hat branding. The PDF includes a branded header, progress summary, all sections and responses, and proper handling of skipped sections.
+Export a professional, print-ready PDF with Red Hat branding. The PDF includes your custom document title, a branded header, progress summary, all sections and responses, and proper handling of skipped sections.
 
 ### Data persistence and portability
 
