@@ -112,7 +112,9 @@ export default function ProgressHeader({
           <FlexItem>
             <TextContent>
               <Text component={TextVariants.h1}>{title}</Text>
-              <Text component={TextVariants.p}>{subtitle}</Text>
+              {subtitle && (
+                <Text component={TextVariants.p}>{subtitle}</Text>
+              )}
             </TextContent>
           </FlexItem>
           <FlexItem>

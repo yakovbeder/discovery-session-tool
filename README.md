@@ -175,8 +175,8 @@ discovery-session-tool/
 ├── package.json                # Dependencies and scripts
 ├── vite.config.ts              # Vite configuration
 ├── tsconfig.json               # TypeScript configuration
-├── start.sh                    # Quick start script
-├── server.py                   # Optional Python static server
+├── start.sh                    # Run with Podman/Docker
+├── dev.sh                      # Run with Node.js (development)
 ├── public/
 │   └── redhat-logo.svg         # Red Hat logo for masthead
 ├── src/
