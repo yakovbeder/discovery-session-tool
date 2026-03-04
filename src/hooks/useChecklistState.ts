@@ -244,14 +244,10 @@ export function useChecklistState() {
   }, []);
 
   const clearAll = useCallback(() => {
-    setDocumentTitle(DEFAULT_TITLE);
-    setDocumentSubtitle(DEFAULT_SUBTITLE);
-    setGeneratorSections(null);
     setResponses({});
     setCustomSections([]);
     setCustomQuestions({});
     setSkippedSections(new Set());
-    localStorage.removeItem(STORAGE_KEY);
   }, []);
 
   const saveNow = useCallback(() => {
@@ -359,6 +355,8 @@ export function useChecklistState() {
   }, []);
 
   const resetToTemplate = useCallback(() => {
+    setDocumentTitle(DEFAULT_TITLE);
+    setDocumentSubtitle(DEFAULT_SUBTITLE);
     setGeneratorSections(null);
     setCustomSections([]);
     setCustomQuestions({});
