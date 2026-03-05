@@ -186,16 +186,6 @@ export default function ChecklistView({
                       alignItems={{ default: 'alignItemsCenter' }}
                       gap={{ default: 'gapSm' }}
                     >
-                      <FlexItem>
-                        <Switch
-                          id={`skip-${section.id}`}
-                          label="Applicable"
-                          labelOff="Skipped"
-                          isChecked={!isSkipped}
-                          onChange={() => onToggleSkip(section.id)}
-                          isReversed
-                        />
-                      </FlexItem>
                       {section.isCustom && (
                         <FlexItem>
                           <Button
@@ -207,6 +197,16 @@ export default function ChecklistView({
                           </Button>
                         </FlexItem>
                       )}
+                      <FlexItem>
+                        <Switch
+                          id={`skip-${section.id}`}
+                          label="Applicable"
+                          labelOff="Skipped"
+                          isChecked={!isSkipped}
+                          onChange={() => onToggleSkip(section.id)}
+                          isReversed
+                        />
+                      </FlexItem>
                     </Flex>
                   ),
                   hasNoOffset: true,
